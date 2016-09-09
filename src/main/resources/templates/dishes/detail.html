@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<form action="#" th:action="@{/dishes}" method="post">
+    <table>
+        <tr>
+            <td>name:</td>
+            <td><input type="text" name="name" /></td>
+        </tr>
+        <tr>
+            <td>type:</td>
+            <td><input type="text" name="type" /></td>
+        </tr>
+        <tr>
+            <td>price:</td>
+            <td><input type="text" name="price" /></td>
+        </tr>
+        <tr>
+            <td>valid:</td>
+            <td><input type="text" name="valid" /></td>
+        </tr>
+        <tr>
+            <td><button type="submit">Submit</button></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
