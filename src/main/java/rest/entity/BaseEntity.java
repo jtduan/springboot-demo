@@ -1,10 +1,12 @@
 package rest.entity;
 
-import org.springframework.context.annotation.Bean;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Created by jtduan on 2016/9/9.
@@ -25,6 +27,9 @@ public abstract class BaseEntity {
     @Column(updatable=false)
     private LocalDateTime createTime;
 
+//    @Column(insertable = false,updatable = false)
+//    @Generated(value = GenerationTime.ALWAYS)
+//    注意:generated注解表示 hibernate会在获取实体的时候进行刷新(以读取正确的updateTime),而不是update的时候自动添加该字段值
     private LocalDateTime updateTime;
 
     @NotNull

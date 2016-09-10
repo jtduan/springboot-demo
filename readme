@@ -1,0 +1,26 @@
+# Springboot餐厅模拟运行版本说明
+
+## 程序框架
+- springboot
+- hibernate
+- springmvc
+
+## 系统架构
+
+## 现有功能
+- 厨师模拟做菜(单线程)
+- User表和Dish表从存储
+- User添加和注册
+
+
+
+
+
+
+
+
+
+
+
+## 知识点
+-
