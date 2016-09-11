@@ -6,7 +6,7 @@
 </head>
 <body>
 <p>Dish Lists</p>
-<p th:text = "欢迎您:${session.username}"></p>
+<p>欢迎您,<span th:text = "${session.username}"></span></p>
 <table>
     <tr>
         <th>名称</th>

@@ -6,6 +6,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import rest.backthreads.Chiefer;
 import rest.config.SpringUtil;
+import rest.schedule.MyApplicationReadyEventListener;
 import rest.service.AllSevice;
 
 @SpringBootApplication
@@ -14,9 +15,10 @@ import rest.service.AllSevice;
 public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication app = new SpringApplication(Application.class);
 
-		SpringUtil.getBean(AllSevice.class).initDataBase();
-		new Thread(new Chiefer()).start();
+//		SpringApplication.run(Application.class, args);
+		app.addListeners(new MyApplicationReadyEventListener());
+		app.run(args);
 	}
 }

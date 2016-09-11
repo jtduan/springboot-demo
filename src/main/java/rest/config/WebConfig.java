@@ -34,14 +34,14 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 //        return registrationBean;
 //    }
 
-//    @Bean
-//    public ServletListenerRegistrationBean registrationListenerBean() {
-//        ServletListenerRegistrationBean  registrationBean = new ServletListenerRegistrationBean ();
-//        registrationBean.setName("MyServletContextListener");
-//        registrationBean.setListener(new MyServletContextListener());
-//        registrationBean.setOrder(2);
-//        return registrationBean;
-//    }
+    @Bean
+    public ServletListenerRegistrationBean registrationListenerBean() {
+        ServletListenerRegistrationBean  registrationBean = new ServletListenerRegistrationBean ();
+        registrationBean.setName("MyServletContextListener");
+        registrationBean.setListener(new MyServletContextListener());
+        registrationBean.setOrder(2);
+        return registrationBean;
+    }
 
     /**
      * 配制简单的映射
