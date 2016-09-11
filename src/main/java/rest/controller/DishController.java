@@ -38,6 +38,7 @@ public class DishController {
     @RequestMapping(value="",method = RequestMethod.GET)
     public String index(HttpSession session, Model model) {
 //        session.setAttribute("name","djt");
+        System.out.println("======");
         List<Dish> list=dishRepo.findAll();
         model.addAttribute("dishes",list);
         return "dishes/list";
@@ -69,7 +70,6 @@ public class DishController {
 
     /**
      * 删除dish
-     * @param id
      * @return
      */
     @RequestMapping(value = "/test/{id:ddd}", method = RequestMethod.GET)

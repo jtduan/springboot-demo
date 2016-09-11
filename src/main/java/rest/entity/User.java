@@ -9,6 +9,7 @@ import rest.constants.VIP;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.EnumSet;
 
 /**
  * Created by hero on 2016/9/5.
@@ -23,7 +24,7 @@ public class User extends BaseEntity{
     private String email;
 
     @NotBlank
-    @ColumnTransformer(write = "password(?)")
+    @ColumnTransformer(write = "md5(?)")
     private String pwd;
 
     @NotBlank
@@ -36,6 +37,9 @@ public class User extends BaseEntity{
     @OneToOne(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private UserFund fund;
 
+    @Convert(converter = RolesConverter.class)
+    private EnumSet<Role> roles;
+
     public User() {
     }
 
@@ -44,6 +48,7 @@ public class User extends BaseEntity{
         this.pwd = pwd;
         this.name = name;
         this.vip = vip;
+        this.roles=EnumSet.of(Role.USER);
         this.fund = new UserFund(this,0,0);
     }
 
@@ -85,5 +90,13 @@ public class User extends BaseEntity{
 
     public void setFund(UserFund fund) {
         this.fund = fund;
+    }
+
+    public EnumSet<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(EnumSet<Role> roles) {
+        this.roles = roles;
     }
 }

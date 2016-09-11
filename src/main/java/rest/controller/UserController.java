@@ -9,8 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
+import rest.config.SpringUtil;
 import rest.constants.Role;
 import rest.constants.VIP;
+import rest.dao.EntityDao;
 import rest.dao.UserRepo;
 import rest.entity.User;
 
@@ -23,6 +25,7 @@ import java.util.List;
  * Created by jtduan on 2016/9/5.
  */
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -36,9 +39,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping("get")
     public String get(){
-//        Priviliage.WRITE.setUserRepo(userRepo);
-//        List<User> list = userRepo.findByName("djt");
-        return Role.ADMIN.get();
+        SpringUtil.getBean(EntityDao.class).save();
+        return "success";
     }
 
     @ResponseBody
@@ -78,13 +80,13 @@ public class UserController {
         return "form";
     }
 
-    @RequestMapping("/login")
-    public String login(@RequestParam String email,@RequestParam String pwd,HttpSession session){
-        User user=userRepo.login(email,pwd);
-        if(user!=null){
-            session.setAttribute("user",user);
-            return "home";
-        }
-        return "index";
-    }
+//    @RequestMapping("/login")
+//    public String login(@RequestParam String email,@RequestParam String pwd,HttpSession session){
+//        User user=userRepo.login(email,pwd);
+//        if(user!=null){
+//            session.setAttribute("user",user);
+//            return "home";
+//        }
+//        return "index";
+//    }
 }

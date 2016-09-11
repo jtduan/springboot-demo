@@ -15,6 +15,8 @@ import java.util.Map;
 /**
  * Created by jtduan on 2016/9/8.
  */
+
+@Deprecated
 public class ViewHelper {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 

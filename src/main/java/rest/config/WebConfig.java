@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import rest.schedule.MyFilter;
 import rest.schedule.MyHttpSessionListener;
@@ -41,6 +42,17 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 //        registrationBean.setOrder(2);
 //        return registrationBean;
 //    }
+
+    /**
+     * 配制简单的映射
+     * @param registry
+     */
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("home");
+        registry.addViewController("/home").setViewName("home");
+        registry.addViewController("/login").setViewName("login");
+    }
 
     @Bean
     public ServletListenerRegistrationBean registrationSessionListenerBean() {

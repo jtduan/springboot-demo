@@ -6,17 +6,20 @@
 </head>
 <body>
 <p>Dish Lists</p>
+<p th:text = "欢迎您:${session.username}"></p>
 <table>
     <tr>
         <th>名称</th>
         <th>价格</th>
         <th>是否有效</th>
+        <th>动作</th>
     </tr>
     <tr th:each="dish : ${dishes}">
         <td style="display: none" th:text="${dish.id}">-1</td>
         <td th:text="${dish.name}">Onions</td>
         <td th:text="${dish.price}">2.41</td>
         <td th:text="${dish.valid}? 有效 : 无效">yes</td>
+        <!--<td th:if="${dish.valid}"><a href = "/dishes/order?id="></a></td>-->
     </tr>
 </table>
 </body>
