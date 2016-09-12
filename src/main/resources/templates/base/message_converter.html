@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="../webjars/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#b1").click(function(){
+                $.ajax({
+                    url: "/base/convertEnumToStr",
+                    data: "",
+                    type:"POST",
+                    contentType:"text/x-responseType",
+                    success: function(data){
+                        alert(data);
+                    }
+                });
+            })
+            $("#b2").click(function(){
+                $.ajax({
+                    url: "/base/convertStrToEnum",
+                    data: "2",
+                    type:"POST",
+                    contentType:"text/x-responseType",
+                    success: function(data){
+                        alert(data);
+                    }
+                });
+            })
+        });
+    </script>
+</head>
+<body>
+<p>测试HttpMessageConvert</p>
+<button id = "b1">获取对象</button>
+<button id = "b2">发送对象</button>
+</body>
+</html>
