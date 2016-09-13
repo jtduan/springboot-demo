@@ -1,12 +1,13 @@
-package rest.schedule;
+package rest.listeners;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
 /**
  * Created by jtduan on 2016/9/6.
  */
-//@WebListener
+@WebListener
 public class MyServletContextListener implements ServletContextListener {
 
     @Override

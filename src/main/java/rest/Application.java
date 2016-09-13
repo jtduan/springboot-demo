@@ -2,12 +2,13 @@ package rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import rest.schedule.MyApplicationReadyEventListener;
+import rest.listeners.MyApplicationReadyEventListener;
 
 @SpringBootApplication
 @EnableScheduling
-//@ServletComponentScan
+@ServletComponentScan
 public class Application {
 
 	public static void main(String[] args) {

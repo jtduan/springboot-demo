@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by hero on 2016/9/5.
  */
+@Deprecated
 public enum Role {
 
     ADMIN("ADMIN") {

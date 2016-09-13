@@ -7,7 +7,9 @@ package rest.constants;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import rest.entity.User;
 
 import javax.persistence.EntityManager;
 
@@ -41,5 +43,19 @@ public class SpringUtil implements ApplicationContextAware {
 
     public static EntityManager getEntityManager(){
         return getApplicationContext().getBean(EntityManager.class);
+    }
+
+    /**
+     * 获取登录用户
+     * 通过session.getAttribute("user")获取不会发生异常
+     * @return
+     */
+    @Deprecated
+    public User getLoginedUser(){
+        try {
+            return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        }catch (Exception e){
+            return null;
+        }
     }
 }

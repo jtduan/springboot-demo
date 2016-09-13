@@ -1,5 +1,11 @@
 package rest.constants;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import rest.dao.UserRepo;
+
+import javax.annotation.PostConstruct;
+
 /**
  * Created by jtduan on 2016/9/6.
  */
@@ -19,3 +25,5 @@ public enum VIP {
         return discount;
     }
 }
+
+

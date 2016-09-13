@@ -1,6 +1,7 @@
 package rest.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import rest.config.ViewHelper;
 import rest.dao.DishRepo;
@@ -19,6 +20,7 @@ public class OrderService {
     @Autowired
     private DishRepo dishRepo;
 
+    @PreAuthorize("authenticated")
     public String order(Dish dish, int num){
         return ViewHelper.renderJson("0000","点餐成功");
     }

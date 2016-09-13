@@ -7,16 +7,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import rest.backthreads.CustomQueue;
-import rest.constants.DishType;
-import rest.constants.MyErrorType;
 import rest.constants.ResponseType;
-import rest.constants.VIP;
 import rest.dao.DishRepo;
 import rest.entity.Dish;
-import rest.entity.User;
 
 import javax.annotation.security.PermitAll;
 
@@ -26,8 +20,9 @@ import javax.annotation.security.PermitAll;
 
 @Deprecated
 @Controller
+@PreAuthorize(value = "hasAuthority('ADMIN')")
 @RequestMapping("/base")
-public class BaseController {
+public class TestController {
 
     @Autowired
     private DishRepo dishRepo;
@@ -35,7 +30,6 @@ public class BaseController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping("message_converter")
-//    @PreAuthorize(value = "hasAuthority('ADMIN')")
     public String message_convert(){
         return "base/message_converter";
     }
@@ -66,6 +60,7 @@ public class BaseController {
 //        return new Dish("name", DishType.SMALL,3.4, true);
         throw new RuntimeException("teye");
     }
+
 //    @ResponseBody
 //    @RequestMapping("test1")
 //    public String test(){

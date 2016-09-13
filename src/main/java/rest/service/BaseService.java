@@ -2,7 +2,9 @@ package rest.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rest.constants.DishType;
+import rest.constants.RandomGenerator;
 import rest.constants.Role;
 import rest.constants.VIP;
 import rest.dao.DishRepo;
@@ -14,7 +16,7 @@ import rest.entity.User;
  * Created by jtduan on 2016/9/6.
  */
 @Service("initService")
-public class AllSevice {
+public class BaseService {
     @Autowired
     private UserRepo userRepo;
 
@@ -39,5 +41,12 @@ public class AllSevice {
 
         dish = new Dish("红烧排骨", DishType.BIG,55,true);
         if(dishRepo.findByNameAndType("红烧排骨",DishType.BIG)==null)dishRepo.save(dish);
+    }
+
+    @Transactional
+    public void InsertRandomintoUser(){
+        User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", VIP.values()[RandomGenerator.getRandom(4)]);
+        user.getFund().setRemain(RandomGenerator.getRandom(300));
+        userRepo.save(user);
     }
 }

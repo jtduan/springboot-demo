@@ -1,13 +1,9 @@
 package rest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -17,24 +13,29 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import rest.dao.UserRepo;
 
 import javax.annotation.PostConstruct;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.Filter;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BaseControllerTest {
 
     public static MockMvc mvc;
 
-//    @Autowired
-//    WebApplicationContext webApplicationConnect;
-//
-//    @BeforeClass
-//    public static void setUp() throws JsonProcessingException {
-//        mvc = MockMvcBuilders.webAppContextSetup(webApplicationConnect).build();
-//    }
+    @Test
+    public void testMainPage() throws Exception {
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.ALL)).andReturn();
+        Assert.assertEquals("返回status不为200",mvcResult.getResponse().getStatus(),200);
+        Assert.assertTrue("主页需包含Welcome",mvcResult.getResponse().getContentAsString().contains("Welcome"));
+    }
+
+    @Test
+    public void testLoginPage() throws Exception {
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/login").accept(MediaType.ALL)).andReturn();
+        Assert.assertEquals("返回status不为200",mvcResult.getResponse().getStatus(),200);
+        Assert.assertTrue("主页需包含Welcome",mvcResult.getResponse().getContentAsString().contains("username"));
+    }
 }
 
 @Component
@@ -42,8 +43,13 @@ class MVCInjector {
     @Autowired
     WebApplicationContext webApplicationConnect;
 
+    @Autowired
+    private Filter springSecurityFilterChain;
+
     @PostConstruct
     public void postConstruct() {
-        BaseControllerTest.mvc = MockMvcBuilders.webAppContextSetup(webApplicationConnect).build();
+        BaseControllerTest.mvc = MockMvcBuilders.webAppContextSetup(webApplicationConnect)
+                .addFilters(springSecurityFilterChain)
+                .build();
     }
 }

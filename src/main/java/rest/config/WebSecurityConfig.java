@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                     .authorizeRequests()
                     .antMatchers("/", "/login").permitAll()
-                    .antMatchers("/dishes/**").hasAuthority("ADMIN") //.hasRole("ADMIN")
+                    .antMatchers("/dishes/**").authenticated() //.hasAuthority("ADMIN") //.hasRole("ADMIN")
                     .anyRequest().permitAll()
                 .and()
                     .formLogin()
@@ -68,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .failureHandler(loginFailHandler).failureUrl("/login?error")
                     .successHandler(loginSuccessHandler)
                 .and()
-                    .logout().invalidateHttpSession(true)
+                    .logout().logoutSuccessUrl("/").invalidateHttpSession(true)
                     .permitAll();
     }
 
@@ -87,7 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             User user = (User) SecurityContextHolder.getContext()
                     .getAuthentication()
                     .getPrincipal();
-            httpServletRequest.getSession().setAttribute("username",user.getEmail());
+            httpServletRequest.getSession().setAttribute("user",user);
             loginService.loginSuccess(user,httpServletRequest.getRemoteAddr());
             super.onAuthenticationSuccess(httpServletRequest,httpServletResponse,authentication);
         }

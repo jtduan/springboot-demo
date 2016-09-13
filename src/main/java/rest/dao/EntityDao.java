@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 /**
  * 直接使用EntityManager处理Dao层
  */
+
 @Repository
 public class EntityDao {
 

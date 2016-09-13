@@ -1,24 +1,10 @@
 package rest.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import rest.constants.ResponseType;
-import rest.schedule.MyFilter;
-import rest.schedule.MyHttpSessionListener;
-import rest.schedule.MyInterceptor;
-import rest.schedule.MyServletContextListener;
 
-import javax.servlet.http.HttpSessionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,8 +52,6 @@ public class WebConfig extends WebMvcConfigurerAdapter{
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("home");
-        registry.addViewController("/home").setViewName("home");
         registry.addViewController("/login").setViewName("login");
     }
 
@@ -77,5 +61,4 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         converters.add(converter);
         super.extendMessageConverters(converters);
     }
-
 }
