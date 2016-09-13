@@ -9,6 +9,6 @@ import java.util.List;
 /**
  * Created by hero on 2016/9/5.
  */
-public interface UserRepo extends JpaRepository<User,String> {
+public interface UserRepo extends JpaRepository<User,Long> {
     public User findByEmail(String email);
 }

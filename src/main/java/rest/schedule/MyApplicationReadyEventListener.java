@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import rest.backthreads.Chiefer;
-import rest.config.SpringUtil;
+import rest.constants.SpringUtil;
 import rest.service.AllSevice;
 
 /**

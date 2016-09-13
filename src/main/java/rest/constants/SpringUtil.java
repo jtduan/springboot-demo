@@ -1,4 +1,4 @@
-package rest.config;
+package rest.constants;
 
 /**
  * Created by jtduan on 2016/9/6.

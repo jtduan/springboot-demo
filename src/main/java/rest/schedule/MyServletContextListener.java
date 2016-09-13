@@ -1,12 +1,7 @@
 package rest.schedule;
 
-import rest.backthreads.Chiefer;
-import rest.config.SpringUtil;
-import rest.service.AllSevice;
-
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 
 /**
  * Created by jtduan on 2016/9/6.

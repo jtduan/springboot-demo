@@ -33,10 +33,8 @@ public class UserService implements UserDetailsService {
 
     private class SecurityUser extends User implements UserDetails {
 
-        private User user;
-
         public SecurityUser(User user) {
-            this.user = user;
+            super(user);
         }
 
         @Override
@@ -49,12 +47,12 @@ public class UserService implements UserDetailsService {
 
         @Override
         public String getPassword() {
-            return user.getPwd();
+            return this.getPwd();
         }
 
         @Override
         public String getUsername() {
-            return user.getName();
+            return this.getName();
         }
 
         @Override

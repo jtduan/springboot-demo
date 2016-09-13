@@ -8,18 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
-import rest.config.SpringUtil;
-import rest.constants.Role;
+import rest.constants.SpringUtil;
 import rest.constants.VIP;
 import rest.dao.EntityDao;
 import rest.dao.UserRepo;
 import rest.entity.User;
-
-import javax.servlet.http.HttpSession;
-import javax.validation.*;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by jtduan on 2016/9/5.

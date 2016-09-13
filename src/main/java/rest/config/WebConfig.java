@@ -1,9 +1,11 @@
 package rest.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -25,6 +27,8 @@ import java.util.List;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter{
 
+    @Autowired
+    Environment env;
   //不使用注解方式时，可以使用此方式注册过滤器和监听器
 //    @Bean
 //    public FilterRegistrationBean registrationFilterBean() {
@@ -36,8 +40,13 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 //        return registrationBean;
 //    }
 
+    /**
+     * 这个Bean可以被放到任何类中而不仅限于此类
+     * @return
+     */
     @Bean
     public ServletListenerRegistrationBean registrationListenerBean() {
+
         ServletListenerRegistrationBean  registrationBean = new ServletListenerRegistrationBean ();
         registrationBean.setName("MyServletContextListener");
         registrationBean.setListener(new MyServletContextListener());
