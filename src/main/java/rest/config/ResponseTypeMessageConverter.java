@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by jtduan on 2016/9/12.
+ * 自定义messageConverter将对象转化为字符串，默认为json
  */
 public class ResponseTypeMessageConverter extends AbstractHttpMessageConverter<ResponseType> {
 

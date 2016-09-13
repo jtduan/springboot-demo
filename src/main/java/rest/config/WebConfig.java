@@ -26,24 +26,21 @@ import java.util.List;
  */
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter{
-
-    @Autowired
-    Environment env;
-  //不使用注解方式时，可以使用此方式注册过滤器和监听器
-//    @Bean
-//    public FilterRegistrationBean registrationFilterBean() {
-//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-//        registrationBean.setName("greeting");
-//        registrationBean.setFilter(new MyFilter());
-//        registrationBean.setOrder(1);
-//        registrationBean.addUrlPatterns("/*");
-//        return registrationBean;
-//    }
-
     /**
+     * 不使用注解方式时，可以使用此方式注册过滤器和监听器
      * 这个Bean可以被放到任何类中而不仅限于此类
      * @return
      */
+/*    @Bean
+    public FilterRegistrationBean registrationFilterBean() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        registrationBean.setName("greeting");
+        registrationBean.setFilter(new MyFilter());
+        registrationBean.setOrder(1);
+        registrationBean.addUrlPatterns("");
+        return registrationBean;
+    }
+
     @Bean
     public ServletListenerRegistrationBean registrationListenerBean() {
 
@@ -53,9 +50,18 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         registrationBean.setOrder(2);
         return registrationBean;
     }
+    @Bean
+    public ServletListenerRegistrationBean registrationSessionListenerBean() {
+        ServletListenerRegistrationBean  registrationBean = new ServletListenerRegistrationBean ();
+        registrationBean.setName("MyHttpSessionListener");
+        registrationBean.setListener(new MyHttpSessionListener());
+        registrationBean.setOrder(1);
+        return registrationBean;
+    }*/
 
     /**
      * 配制简单的映射
+     * 注意：此处映射不会被aop.AccessLog捕获！
      * @param registry
      */
     @Override
@@ -65,26 +71,11 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         registry.addViewController("/login").setViewName("login");
     }
 
-    @Bean
-    public ServletListenerRegistrationBean registrationSessionListenerBean() {
-        ServletListenerRegistrationBean  registrationBean = new ServletListenerRegistrationBean ();
-        registrationBean.setName("MyHttpSessionListener");
-        registrationBean.setListener(new MyHttpSessionListener());
-        registrationBean.setOrder(1);
-        return registrationBean;
-    }
-
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**");
-//    }
-
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         ResponseTypeMessageConverter converter = new ResponseTypeMessageConverter();
         converters.add(converter);
         super.extendMessageConverters(converters);
     }
-
-//    configureMessageConverters
 
 }

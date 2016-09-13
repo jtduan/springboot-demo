@@ -2,9 +2,7 @@ package rest.backthreads;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import rest.entity.Dish;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;

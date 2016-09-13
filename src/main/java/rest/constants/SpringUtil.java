@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+
 @Component
 public class SpringUtil implements ApplicationContextAware {
     private static ApplicationContext applicationContext = null;
@@ -35,5 +37,9 @@ public class SpringUtil implements ApplicationContextAware {
     //通过name,以及Clazz返回指定的Bean
     public static <T> T getBean(String name,Class<T> clazz){
         return getApplicationContext().getBean(name, clazz);
+    }
+
+    public static EntityManager getEntityManager(){
+        return getApplicationContext().getBean(EntityManager.class);
     }
 }
