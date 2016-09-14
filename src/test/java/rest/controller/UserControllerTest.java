@@ -90,6 +90,7 @@ public class UserControllerTest {
         Assert.assertEquals("删除返回结果错误", ResponseType.SUCCESS.getResponseStr(),
                 mvcResult.getResponse().getContentAsString());
 
+        
         uri = "/users/989898983";
         mvcResult = mvc.perform(delete(uri).with(admin())
                 .accept(MediaType.ALL)).andReturn();
