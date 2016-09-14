@@ -47,6 +47,8 @@ public class AccessFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
+        response.setCharacterEncoding("UTF-8");
+        System.out.println("过滤器过滤");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         User user = (User) httpRequest.getSession().getAttribute("user");
         accessHistoryService.saveAccessHistory(user, httpRequest.getRemoteAddr(), httpRequest.getRequestURL().toString());

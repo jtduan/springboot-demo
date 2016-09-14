@@ -1,5 +1,7 @@
 package rest.constants;
 
+import rest.entity.User;
+
 import java.util.Random;
 
 public class RandomGenerator{
@@ -28,5 +30,9 @@ public class RandomGenerator{
                 .append(".")
                 .append(text(3))
                 .toString();
+    }
+
+    public static User getRandomUser(){
+        return new User(RandomGenerator.email(), RandomGenerator.text(5), RandomGenerator.text(4), VIP.VIP1);
     }
 }

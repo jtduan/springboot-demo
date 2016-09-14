@@ -1,9 +1,12 @@
 package rest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
  * Created by jtduan on 2016/9/6.
+ *  @JsonIgnore 会使构造json时忽略该字段（以免造成死循环）
  */
 @Entity
 @Table(name ="user_fund")
@@ -12,6 +15,7 @@ public class UserFund extends BaseEntity{
     @Id
     private long id;
 
+    @JsonIgnore
     @MapsId
     @JoinColumn(name = "user_id")
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

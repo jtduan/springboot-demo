@@ -5,83 +5,61 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import rest.constants.ResponseType;
+import rest.constants.Role;
 import rest.constants.SpringUtil;
-import rest.constants.VIP;
-import rest.dao.EntityDao;
-import rest.dao.UserRepo;
 import rest.entity.User;
+import rest.service.UserService;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by jtduan on 2016/9/5.
  */
-@Controller
+@RestController
 @RequestMapping("/users")
-@PreAuthorize("authenticated")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private UserRepo userRepo;
+    private UserService userService;
 
-    @Value("${constants.priviliage.write}")
-    private String text;
-
-    @ResponseBody
-    @RequestMapping("get")
-    public String get(){
-        SpringUtil.getBean(EntityDao.class).save();
-        return "success";
+    @RequestMapping(method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<User> list(){
+        return userService.findAll();
     }
 
-    @ResponseBody
-    @RequestMapping("insert")
-    public String insert(){
-        User user = new User();
-        user.setEmail("djtqq.com");
-        user.setName("asd");
-        user.setVip(VIP.VIP0);
-        user.setPwd("djt");
-        userRepo.save(user);
-        return "success";
-    }
-
-    @ResponseBody
-    @RequestMapping("update")
-    public String update(){
-        User user=userRepo.findByEmail("jtduan@qq.com");
-        if(user!=null) {
-            user.setEmail("djt@qq.com");
-            userRepo.save(user);
-            return "success";
+    @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.GET)
+    @PreAuthorize("authenticated")
+    public User getUser(@PathVariable Long id, HttpSession session) {
+        if(((User)session.getAttribute("user")).getId()!=id){
+            return null;
         }
-        return "fail";
+        return userService.findOne(id);
     }
 
-    @RequestMapping(value = "new", method=RequestMethod.POST)
-    public String addUser(@Validated User user, BindingResult validation) {
-        if (validation.hasErrors()) {
-           for(String str:validation.getModel().keySet()){
-               System.out.println(validation.getModel().get(str));
-           }
-           return "form";
+    @RequestMapping(method = RequestMethod.POST,produces = { "text/x-responseType" })
+    public  ResponseType registerUser(User user) {
+        return userService.register(user);
+    }
+
+    @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.PUT ,produces = { "text/x-responseType" })
+    @PreAuthorize("authenticated")
+    public ResponseType updateUser(@PathVariable long id, @RequestParam String type,@RequestParam String value,HttpSession session) {
+        User u = (User)session.getAttribute("user");
+        if(u.getId()==id || u.getRoles().contains(Role.ADMIN)) {
+            return userService.updateUser(id, type, value);
         }
-        user.setVip(VIP.VIP0);
-        User saved = userRepo.save(user);
-        return "form";
+        return ResponseType.PERMISSION_DENIED;
     }
 
-//    @RequestMapping("/login")
-//    public String login(@RequestParam String email,@RequestParam String pwd,HttpSession session){
-//        User user=userRepo.login(email,pwd);
-//        if(user!=null){
-//            session.setAttribute("user",user);
-//            return "home";
-//        }
-//        return "index";
-//    }
+    @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.DELETE,produces = { "text/x-responseType" })
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseType deleteUser(@PathVariable Long id) {
+        return userService.delete(id);
+    }
 }

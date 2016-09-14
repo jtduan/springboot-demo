@@ -51,11 +51,27 @@ public class SpringUtil implements ApplicationContextAware {
      * @return
      */
     @Deprecated
-    public User getLoginedUser(){
+    public static User getLoginedUser(){
         try {
             return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         }catch (Exception e){
             return null;
         }
+    }
+
+    /**
+     * 判断登录用户是否与指定用户一致
+     * @param id
+     * @return
+     */
+    public static boolean checkUser(long id) {
+        return getLoginedUser()!=null && getLoginedUser().getId()==id;
+    }
+    /**
+     * 判断登录用户是超级管理员
+     * @return
+     */
+    public static boolean checkAdmin() {
+        return getLoginedUser()!=null && getLoginedUser().getRoles().contains(Role.ADMIN);
     }
 }

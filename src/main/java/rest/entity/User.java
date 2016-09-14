@@ -1,8 +1,10 @@
 package rest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
+import rest.constants.ResponseType;
 import rest.constants.Role;
 import rest.constants.VIP;
 
@@ -23,15 +25,14 @@ public class User extends BaseEntity{
     @NaturalId(mutable = true)
     private String email;
 
+    @JsonIgnore
     @NotBlank
     @ColumnTransformer(write = "md5(?)")
     private String pwd;
 
-    @NotBlank
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @NotNull
     private VIP vip;
 
     @OneToOne(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)

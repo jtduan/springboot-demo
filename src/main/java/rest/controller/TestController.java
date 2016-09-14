@@ -20,7 +20,6 @@ import javax.annotation.security.PermitAll;
 
 @Deprecated
 @Controller
-@PreAuthorize(value = "hasAuthority('ADMIN')")
 @RequestMapping("/base")
 public class TestController {
 
@@ -36,7 +35,6 @@ public class TestController {
 
     @RequestMapping(value = "convertEnumToStr", produces = { "text/x-responseType" })
     @ResponseBody
-    @PermitAll
     public ResponseType convertEnumToStr() {
         return ResponseType.SUCCESS;
     }
@@ -48,7 +46,6 @@ public class TestController {
      */
     @RequestMapping(value = "convertStrToEnum", produces = { "text/x-responseType" })
     @ResponseBody
-    @PermitAll
     public ResponseType convertStrToEnum(@RequestBody ResponseType type) {
         logger.info("测试-Type类型："+type.getCode()+",Msg:"+type.getMsg());
         return ResponseType.SUCCESS;

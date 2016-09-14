@@ -7,6 +7,14 @@ import java.util.NoSuchElementException;
  */
 public enum ResponseType {
     SUCCESS(0,"成功"),
+
+    USER_NAME_PATTERN_ERROR(1000,"用户名称格式错误"),
+    USER_NAME_CONFLICT(1001,"用户名称重复"),
+    USER_FILED_FINAL(1002,"用户字段不可变"),
+    USER_NOTFOUND(1003,"没有这个用户"),
+    INVALID_EMAIL(2001,"不合法的Email地址"),
+
+    PERMISSION_DENIED(3001,"权限不足"),
     NAME_ERROR(1,"名称错误"),
     FATAL(2,"未知错误");
 
@@ -50,4 +58,7 @@ public enum ResponseType {
         throw new NoSuchElementException("NoSuchElement");
     }
 
+    public String getResponseStr() {
+        return code+":"+msg;
+    }
 }

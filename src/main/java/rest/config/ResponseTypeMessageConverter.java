@@ -41,6 +41,6 @@ public class ResponseTypeMessageConverter extends AbstractHttpMessageConverter<R
     @Override
     protected void writeInternal(ResponseType responseType, HttpOutputMessage httpOutputMessage) throws IOException, HttpMessageNotWritableException {
         String out = responseType.getCode()+":"+responseType.getMsg();
-        httpOutputMessage.getBody().write(out.getBytes());
+        httpOutputMessage.getBody().write(out.getBytes("utf-8"));
     }
 }
