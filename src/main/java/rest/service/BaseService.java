@@ -3,14 +3,14 @@ package rest.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rest.constants.DishType;
-import rest.constants.RandomGenerator;
-import rest.constants.Role;
-import rest.constants.VIP;
+import rest.constants.*;
 import rest.dao.DishRepo;
 import rest.dao.UserRepo;
 import rest.entity.Dish;
 import rest.entity.User;
+
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Created by jtduan on 2016/9/6.
@@ -44,9 +44,32 @@ public class BaseService {
     }
 
     @Transactional
-    public void InsertRandomintoUser(){
+    public User InsertRandomUser(){
         User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", VIP.values()[RandomGenerator.getRandom(4)]);
         user.getFund().setRemain(RandomGenerator.getRandom(300));
-        userRepo.save(user);
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public User InsertRandomAdmin(){
+        User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", VIP.values()[RandomGenerator.getRandom(4)]);
+        user.getFund().setRemain(RandomGenerator.getRandom(300));
+        user.setRoles(EnumSet.of(Role.ADMIN));
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public long getNotExistIdinUser(){
+        for(int i=0;i<100;i++){
+            long id = RandomGenerator.getRandom(100000)+100000;
+            if(SpringUtil.getEntityManager().find(User.class,id)==null) return id;
+        }
+        throw new RuntimeException("找不到可用id");
+    }
+
+    @Transactional
+    public long getExistIdinUser(){
+        List<User> l = userRepo.findAll();
+        return l.get(RandomGenerator.getRandom(l.size()-1)).getId();
     }
 }

@@ -43,8 +43,8 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void testUpdateUser() throws Exception {
-        String uri = "/users/998928";
-        MvcResult mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestUser())
+        String uri = "/users/"+baseService.getNotExistIdinUser();
+        MvcResult mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestAdmin())
                 .param("value", RandomGenerator.email())
                 .param("type", "email")
                 .accept(MediaType.ALL)).andReturn();
@@ -52,8 +52,8 @@ public class UserControllerTest {
         Assert.assertEquals("更新返回错误", ResponseType.USER_NOTFOUND.getResponseStr(),
                 mvcResult.getResponse().getContentAsString());
 
-        uri = "/users/1";
-        mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestUser())
+        uri = "/users/"+baseService.getExistIdinUser();
+        mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestAdmin())
                 .param("value", RandomGenerator.email())
                 .param("type", "email2")
                 .accept(MediaType.ALL)).andReturn();
@@ -61,8 +61,8 @@ public class UserControllerTest {
         Assert.assertEquals("更新返回错误", ResponseType.USER_FILED_FINAL.getResponseStr(),
                 mvcResult.getResponse().getContentAsString());
 
-        uri = "/users/1";
-        mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestUser())
+        uri = "/users/"+baseService.getExistIdinUser();
+        mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestAdmin())
                 .param("value", RandomGenerator.email())
                 .param("type", "email")
                 .accept(MediaType.ALL)).andReturn();
@@ -70,8 +70,8 @@ public class UserControllerTest {
         Assert.assertEquals("更新返回错误", ResponseType.SUCCESS.getResponseStr(),
                 mvcResult.getResponse().getContentAsString());
 
-        uri = "/users/1";
-        mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestUser())
+        uri = "/users/"+baseService.getExistIdinUser();
+        mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestAdmin())
                 .param("value", "InValidEmail")
                 .param("type", "email")
                 .accept(MediaType.ALL)).andReturn();
@@ -83,7 +83,7 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void testDeleteUser() throws Exception {
-        String uri = "/users/1";
+        String uri = "/users/"+baseService.getExistIdinUser();
         MvcResult mvcResult = mvc.perform(delete(uri).with(admin())
                 .accept(MediaType.ALL)).andReturn();
         mvcResult.getResponse().setCharacterEncoding("utf-8");
@@ -91,7 +91,7 @@ public class UserControllerTest {
                 mvcResult.getResponse().getContentAsString());
 
         
-        uri = "/users/989898983";
+        uri = "/users/"+baseService.getNotExistIdinUser();
         mvcResult = mvc.perform(delete(uri).with(admin())
                 .accept(MediaType.ALL)).andReturn();
         mvcResult.getResponse().setCharacterEncoding("utf-8");
@@ -102,7 +102,7 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void testPriviliage() throws Exception {
-        String uri = "/users/1";
+        String uri = "/users/"+baseService.getExistIdinUser();
         MvcResult mvcResult = mvc.perform(put(uri).sessionAttr("user",requestUser())
                 .param("value", RandomGenerator.email())
                 .param("type", "email")

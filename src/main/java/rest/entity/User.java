@@ -13,12 +13,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * Created by hero on 2016/9/5.
  * 不要使用Email作为主键，不方便修改绑定
  * 添加Unique约束 uniqueConstraints = {@UniqueConstraint(columnNames = "email")}
  */
+
 @Entity
 @Table(name ="user")
 public class User extends BaseEntity{
@@ -41,6 +43,12 @@ public class User extends BaseEntity{
 
     @Convert(converter = RolesConverter.class)
     private EnumSet<Role> roles;
+
+    /**
+     * 有该字段才能实现级联删除User
+     */
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    private Set<LoginHistory> loginHistories;
 
     public User() {
     }

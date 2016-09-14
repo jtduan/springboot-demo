@@ -40,9 +40,17 @@ public class BaseServiceTest {
         User user = new User("test@qq.okm","test","test", VIP.VIP1);
         userRepo.save(user);
     }
-
     @Test
-    public void getUser(){
+    public void testTransactionalRes(){
         Assert.assertNull("@Transactional未生效，表中找到测试数据",userRepo.findByEmail("test@qq.okm"));
     }
+
+    @Test
+    @Transactional
+    public void getUser(){
+        User u=service.InsertRandomUser();
+        Assert.assertTrue(u.getId()>0);
+        Assert.assertNull("@Transactional未生效，表中找到测试数据",userRepo.findByEmail("test@qq.okm"));
+    }
+
 }

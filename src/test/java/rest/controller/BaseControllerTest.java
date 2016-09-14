@@ -18,6 +18,8 @@ import org.springframework.web.context.WebApplicationContext;
 import rest.constants.Role;
 import rest.constants.VIP;
 import rest.entity.User;
+import rest.service.BaseService;
+import rest.service.UserService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
@@ -32,16 +34,24 @@ public class BaseControllerTest {
 
     public static MockMvc mvc;
 
+    public static BaseService baseService;
+
     public static RequestPostProcessor admin() {
         SimpleGrantedAuthority authorities = new SimpleGrantedAuthority("ADMIN");
-        return user("jtduan@qq.com").authorities(authorities);
+        return user("admin").authorities(authorities);
+    }
+
+    public static RequestPostProcessor simpleUser() {
+        SimpleGrantedAuthority authorities = new SimpleGrantedAuthority("USER");
+        return user("user").authorities(authorities);
+    }
+
+    public static User requestAdmin(){
+        return baseService.InsertRandomAdmin();
     }
 
     public static User requestUser(){
-        User u = new User("jtduan@qq.com","jtduan","jtduan", VIP.VIP1);
-        u.setId(1l);
-        u.setRoles(EnumSet.of(Role.ADMIN));
-        return u;
+        return baseService.InsertRandomUser();
     }
 
     @Test
@@ -67,10 +77,14 @@ class MVCInjector {
     @Autowired
     private Filter springSecurityFilterChain;
 
+    @Autowired
+    BaseService service;
+
     @PostConstruct
     public void postConstruct() {
         BaseControllerTest.mvc = MockMvcBuilders.webAppContextSetup(webApplicationConnect)
                 .addFilters(springSecurityFilterChain)
                 .build();
+        BaseControllerTest.baseService=service;
     }
 }
