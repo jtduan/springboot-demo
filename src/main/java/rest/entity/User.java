@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
+import rest.constants.Constant;
 import rest.constants.ResponseType;
 import rest.constants.Role;
 import rest.constants.VIP;
@@ -21,7 +22,7 @@ import java.util.EnumSet;
 @Entity
 @Table(name ="user")
 public class User extends BaseEntity{
-    @Pattern(regexp = "^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w{2,3}){1,3})$",message = "必须为一个合法的Email地址")
+    @Pattern(regexp = Constant.emailPattern,message = "必须为一个合法的Email地址")
     @NaturalId(mutable = true)
     private String email;
 

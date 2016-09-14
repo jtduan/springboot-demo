@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rest.constants.Constant;
 import rest.constants.ResponseType;
 import rest.constants.Role;
 import rest.constants.VIP;
@@ -88,8 +89,8 @@ public class UserService implements UserDetailsService {
     }
 
     public ResponseType register(User user) {
-        if(user.getEmail()==null || user.getPwd() == null){
-            return ResponseType.NAME_ERROR;
+        if(user.getEmail()==null || user.getPwd() == null || !user.getEmail().matches(Constant.emailPattern)){
+            return ResponseType.INPUT_ERROR;
         }
         User validUser = userRepo.findByEmail(user.getEmail());
         if(validUser != null) {

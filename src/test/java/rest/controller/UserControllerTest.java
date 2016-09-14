@@ -12,9 +12,7 @@ import rest.constants.RandomGenerator;
 import rest.constants.ResponseType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static rest.controller.BaseControllerTest.admin;
-import static rest.controller.BaseControllerTest.mvc;
-import static rest.controller.BaseControllerTest.requestUser;
+import static rest.controller.BaseControllerTest.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -24,12 +22,21 @@ public class UserControllerTest {
     @Transactional
     public void testRegisterUser() throws Exception {
         String uri = "/users";
-        MvcResult mvcResult = mvc.perform(post(uri).with(admin())
+        MvcResult mvcResult = mvc.perform(post(uri)
                 .param("email", RandomGenerator.email())
                 .param("pwd", "123456")
                 .accept(MediaType.ALL)).andReturn();
         mvcResult.getResponse().setCharacterEncoding("utf-8");
         Assert.assertEquals("注册返回结果错误", ResponseType.SUCCESS.getResponseStr(),
+                mvcResult.getResponse().getContentAsString());
+
+        uri = "/users";
+        mvcResult = mvc.perform(post(uri)
+                .param("email", "InvilidEmail")
+                .param("pwd", "123456")
+                .accept(MediaType.ALL)).andReturn();
+        mvcResult.getResponse().setCharacterEncoding("utf-8");
+        Assert.assertEquals("注册返回结果错误", ResponseType.INPUT_ERROR.getResponseStr(),
                 mvcResult.getResponse().getContentAsString());
     }
 
@@ -88,6 +95,19 @@ public class UserControllerTest {
                 .accept(MediaType.ALL)).andReturn();
         mvcResult.getResponse().setCharacterEncoding("utf-8");
         Assert.assertEquals("删除返回结果错误", ResponseType.USER_NOTFOUND.getResponseStr(),
+                mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
+    @Transactional
+    public void testPriviliage() throws Exception {
+        String uri = "/users/1";
+        MvcResult mvcResult = mvc.perform(put(uri).sessionAttr("user",requestUser())
+                .param("value", RandomGenerator.email())
+                .param("type", "email")
+                .accept(MediaType.ALL)).andReturn();
+        mvcResult.getResponse().setCharacterEncoding("utf-8");
+        Assert.assertEquals("更新返回错误", ResponseType.PERMISSION_DENIED.getResponseStr(),
                 mvcResult.getResponse().getContentAsString());
     }
 }

@@ -12,6 +12,7 @@ public enum ResponseType {
     USER_NAME_CONFLICT(1001,"用户名称重复"),
     USER_FILED_FINAL(1002,"用户字段不可变"),
     USER_NOTFOUND(1003,"没有这个用户"),
+    INPUT_ERROR(1004,"输入错误"),
     INVALID_EMAIL(2001,"不合法的Email地址"),
 
     PERMISSION_DENIED(3001,"权限不足"),
