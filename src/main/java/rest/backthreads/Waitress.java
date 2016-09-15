@@ -18,7 +18,7 @@ public class Waitress {
 
 
     public void notifyUser(User user,Dish dish){
-        log.info("通知："+user.getEmail()+"-"+dish.getName()+dish.getType());
+        log.info("通知："+user.getEmail()+"-"+dish.getName()+dish.getUserType());
     }
 
     public void updateDish(Dish waited_dish){

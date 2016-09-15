@@ -61,11 +61,11 @@ public class Dish extends BaseEntity implements Serializable {
         this.name = name;
     }
 
-    public DishType getType() {
+    public DishType getUserType() {
         return type;
     }
 
-    public void setType(DishType type) {
+    public void setUserType(DishType type) {
         this.type = type;
     }
 

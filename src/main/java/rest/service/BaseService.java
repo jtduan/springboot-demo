@@ -7,6 +7,7 @@ import rest.constants.*;
 import rest.dao.DishRepo;
 import rest.dao.UserRepo;
 import rest.entity.Dish;
+import rest.entity.Employee;
 import rest.entity.User;
 
 import java.util.EnumSet;
@@ -45,15 +46,17 @@ public class BaseService {
     @Transactional
     public User InsertRandomUser(){
         User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", VIP.values()[RandomGenerator.getRandom(4)]);
-//        user.getFund().setRemain(RandomGenerator.getRandom(300));
         return userRepo.save(user);
     }
 
     @Transactional
     public User InsertRandomAdmin(){
-        User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", VIP.values()[RandomGenerator.getRandom(4)]);
-//        user.getFund().setRemain(RandomGenerator.getRandom(300));
-//        user.setRoles(EnumSet.of(Role.ADMIN));
+        Employee e = new Employee(EnumSet.of(Role.ADMIN),0);
+        User user = new User();
+        user.setName(RandomGenerator.text(5));
+        user.setEmail(RandomGenerator.email());
+        user.setPwd(RandomGenerator.text(5));
+        user.setUserType(e);
         return userRepo.save(user);
     }
 

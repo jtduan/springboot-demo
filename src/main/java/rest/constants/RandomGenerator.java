@@ -20,6 +20,9 @@ public class RandomGenerator{
     }
 
     public static int getRandom(int max){
+        if(max<=0){
+            return 0;
+        }
         return random.nextInt(max);
     }
 

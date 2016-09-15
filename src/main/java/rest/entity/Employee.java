@@ -30,4 +30,12 @@ public class Employee extends BaseEntity implements UserType{
     public void setSalary(double salary) {
         this.salary = salary;
     }
+
+    public Employee() {
+    }
+
+    public Employee(EnumSet<Role> roles, double salary) {
+        this.roles = roles;
+        this.salary = salary;
+    }
 }

@@ -50,11 +50,11 @@ public class UserController {
     @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.PUT ,produces = { "text/x-responseType" })
     @PreAuthorize("authenticated")
     public ResponseType updateUser(@PathVariable long id, @RequestParam String type,@RequestParam String value,HttpSession session) {
-        User u = (User)session.getAttribute("user");
+//        User u = (User)session.getAttribute("user");
 //        if(u.getId()==id || u.getRoles().contains(Role.ADMIN)) {
-//            return userService.updateUser(id, type, value);
+            return userService.updateUser(id, type, value);
 //        }
-        return ResponseType.PERMISSION_DENIED;
+//        return ResponseType.PERMISSION_DENIED;
     }
 
     @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.DELETE,produces = { "text/x-responseType" })

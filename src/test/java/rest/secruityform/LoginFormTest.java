@@ -16,6 +16,6 @@ public class LoginFormTest extends BaseControllerTest {
     @Test
     public void testLogin() throws Exception {
         mvc.perform(formLogin().user("jtduan@qq.com").password("jtduan"))
-                .andExpect(authenticated().withUsername("jtduan@qq.com"));
+                .andExpect(authenticated().withUsername("1"));
     }
 }

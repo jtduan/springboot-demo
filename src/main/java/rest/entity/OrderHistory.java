@@ -31,7 +31,7 @@ public class OrderHistory extends BaseEntity{
 
     public OrderHistory(User user,Dish dish) {
         this.dish_name=dish.getName();
-        this.dish_type = dish.getType();
+        this.dish_type = dish.getUserType();
         this.dish_price = dish.getPrice();
         this.state = 0;
         this.user = user;

@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public ResponseType updateUser(long id, String type, String value) {
-        if(!(SpringUtil.checkUser(id) && SpringUtil.checkAdmin())){
+        if(!(SpringUtil.checkUser(id) || SpringUtil.checkAdmin())){
             return ResponseType.PERMISSION_DENIED;
         }
         try {
@@ -52,8 +52,8 @@ public class UserService implements UserDetailsService {
                     u.setPwd(value);
                     break;
                 case "vip":
-                    if(u.getType() instanceof Consumer) {
-                        ((Consumer) u.getType()).setVip(VIP.valueOf(value));
+                    if(u.getUserType() instanceof Consumer) {
+                        ((Consumer) u.getUserType()).setVip(VIP.valueOf(value));
                     }else{
                         return ResponseType.INVALID_OPERATION;
                     }
@@ -104,7 +104,7 @@ public class UserService implements UserDetailsService {
             return ResponseType.USER_NAME_CONFLICT;
         }
         Consumer consumer = new Consumer(VIP.VIP0);
-        user.setType(consumer);
+        user.setUserType(consumer);
         if (user.getName() == null) {
             user.setName(user.getEmail());
         }

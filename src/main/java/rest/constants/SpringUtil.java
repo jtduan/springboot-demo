@@ -7,6 +7,7 @@ package rest.constants;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -83,7 +84,8 @@ public class SpringUtil implements ApplicationContextAware {
      */
     public static boolean checkAdmin() {
         UserDetails ud =getLoginedUser();
-        if(ud.getAuthorities().contains("ADMIN")) {
+        SimpleGrantedAuthority authorities = new SimpleGrantedAuthority("ADMIN");
+        if(ud.getAuthorities().contains(authorities)) {
             return true;
         }
         return false;

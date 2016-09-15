@@ -1,20 +1,18 @@
 package rest.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.NotBlank;
 import rest.constants.Constant;
-import rest.constants.ResponseType;
-import rest.constants.Role;
 import rest.constants.VIP;
 
-import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -48,9 +46,12 @@ public class User extends BaseEntity {
                     @MetaValue(targetEntity = Employee.class, value = "EMPLOYEE")
             }
     )
+
+    @JsonTypeInfo(use=JsonTypeInfo.Id.NAME,include = JsonTypeInfo.As.PROPERTY,property="type")
+    @JsonSubTypes({@JsonSubTypes.Type(value=Employee.class,name="employee"),@JsonSubTypes.Type(value=Consumer.class,name="consumer")})
     @Cascade({org.hibernate.annotations.CascadeType.ALL})
     @JoinColumn(name = "type_id")
-    private UserType type;
+    private UserType userType;
 
     /**
      * 有该字段才能实现级联删除User
@@ -66,7 +67,7 @@ public class User extends BaseEntity {
         this.email = user.getEmail();
         this.pwd = user.getPwd();
         this.name = user.getName();
-        this.type=user.type;
+        this.userType=user.userType;
     }
 
     /**
@@ -80,7 +81,7 @@ public class User extends BaseEntity {
         this.email = email;
         this.pwd = pwd;
         this.name = name;
-        this.type=new Consumer(vip);
+        this.userType=new Consumer(vip);
     }
 
     public String getEmail() {
@@ -107,11 +108,11 @@ public class User extends BaseEntity {
         this.name = name;
     }
 
-    public UserType getType() {
-        return type;
+    public UserType getUserType() {
+        return userType;
     }
 
-    public void setType(UserType type) {
-        this.type = type;
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 }
