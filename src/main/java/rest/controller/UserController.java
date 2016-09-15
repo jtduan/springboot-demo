@@ -51,9 +51,9 @@ public class UserController {
     @PreAuthorize("authenticated")
     public ResponseType updateUser(@PathVariable long id, @RequestParam String type,@RequestParam String value,HttpSession session) {
         User u = (User)session.getAttribute("user");
-        if(u.getId()==id || u.getRoles().contains(Role.ADMIN)) {
-            return userService.updateUser(id, type, value);
-        }
+//        if(u.getId()==id || u.getRoles().contains(Role.ADMIN)) {
+//            return userService.updateUser(id, type, value);
+//        }
         return ResponseType.PERMISSION_DENIED;
     }
 

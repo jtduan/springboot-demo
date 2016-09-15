@@ -1,6 +1,6 @@
 package rest.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import rest.constants.VIP;
 
 import javax.persistence.*;
 
@@ -9,17 +9,12 @@ import javax.persistence.*;
  *  @JsonIgnore 会使构造json时忽略该字段（以免造成死循环）
  */
 @Entity
-@Table(name ="user_fund")
-public class UserFund extends BaseEntity{
+@Table(name ="consumer")
+@DiscriminatorValue("CONSUMER")
+public class Consumer extends BaseEntity implements UserType{
 
-    @Id
-    private long id;
-
-    @JsonIgnore
-    @MapsId
-    @JoinColumn(name = "user_id")
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    private User user;
+    @Enumerated(EnumType.STRING)
+    private VIP vip;
 
     /**
      * 余额
@@ -31,21 +26,17 @@ public class UserFund extends BaseEntity{
      */
     private double cost;
 
-    public UserFund() {
+    public Consumer() {
     }
 
-    public UserFund(User user, double remain, double cost) {
-        this.user = user;
+    public Consumer(VIP vip) {
+        this(0,0,vip);
+    }
+
+    public Consumer(double remain, double cost, VIP vip) {
         this.remain = remain;
         this.cost = cost;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+        this.vip=vip;
     }
 
     public double getRemain() {
@@ -62,5 +53,13 @@ public class UserFund extends BaseEntity{
 
     public void setCost(double cost) {
         this.cost = cost;
+    }
+
+    public VIP getVip() {
+        return vip;
+    }
+
+    public void setVip(VIP vip) {
+        this.vip = vip;
     }
 }

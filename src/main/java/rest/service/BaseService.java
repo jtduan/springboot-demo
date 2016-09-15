@@ -29,7 +29,6 @@ public class BaseService {
     public void initDataBase(){
         User user = new User("jtduan@qq.com","jtduan","jtduan", VIP.VIP0);
         if(userRepo.findByEmail("jtduan@qq.com")==null){
-            user.getFund().setCost(128);
             userRepo.save(user);
         }
 
@@ -46,15 +45,15 @@ public class BaseService {
     @Transactional
     public User InsertRandomUser(){
         User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", VIP.values()[RandomGenerator.getRandom(4)]);
-        user.getFund().setRemain(RandomGenerator.getRandom(300));
+//        user.getFund().setRemain(RandomGenerator.getRandom(300));
         return userRepo.save(user);
     }
 
     @Transactional
     public User InsertRandomAdmin(){
         User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", VIP.values()[RandomGenerator.getRandom(4)]);
-        user.getFund().setRemain(RandomGenerator.getRandom(300));
-        user.setRoles(EnumSet.of(Role.ADMIN));
+//        user.getFund().setRemain(RandomGenerator.getRandom(300));
+//        user.setRoles(EnumSet.of(Role.ADMIN));
         return userRepo.save(user);
     }
 

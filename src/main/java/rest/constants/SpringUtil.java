@@ -8,8 +8,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import rest.entity.User;
 
 import javax.persistence.EntityManager;
 
@@ -23,55 +23,69 @@ public class SpringUtil implements ApplicationContextAware {
             SpringUtil.applicationContext = applicationContext;
         }
     }
+
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
     }
 
-    public static Object getBean(String name){
+    public static Object getBean(String name) {
         return getApplicationContext().getBean(name);
     }
 
     //通过class获取Bean.
-    public static <T> T getBean(Class<T> clazz){
+    public static <T> T getBean(Class<T> clazz) {
         return getApplicationContext().getBean(clazz);
     }
 
     //通过name,以及Clazz返回指定的Bean
-    public static <T> T getBean(String name,Class<T> clazz){
+    public static <T> T getBean(String name, Class<T> clazz) {
         return getApplicationContext().getBean(name, clazz);
     }
 
-    public static EntityManager getEntityManager(){
+    public static EntityManager getEntityManager() {
         return getApplicationContext().getBean(EntityManager.class);
     }
 
     /**
      * 获取登录用户
      * 通过session.getAttribute("user")获取不会发生异常
+     *
      * @return
      */
     @Deprecated
-    public static User getLoginedUser(){
+    public static UserDetails getLoginedUser() {
         try {
-            return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        }catch (Exception e){
+            Object ud = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return (UserDetails)ud;
+        } catch (Exception e) {
             return null;
         }
     }
 
     /**
      * 判断登录用户是否与指定用户一致
+     *
      * @param id
      * @return
      */
     public static boolean checkUser(long id) {
-        return getLoginedUser()!=null && getLoginedUser().getId()==id;
+        UserDetails ud = getLoginedUser();
+        if(ud!=null && String.valueOf(id).equals(ud.getUsername())) {
+            return true;
+        }
+        return false;
     }
+
     /**
      * 判断登录用户是超级管理员
+     *
      * @return
      */
     public static boolean checkAdmin() {
-        return getLoginedUser()!=null && getLoginedUser().getRoles().contains(Role.ADMIN);
+        UserDetails ud =getLoginedUser();
+        if(ud.getAuthorities().contains("ADMIN")) {
+            return true;
+        }
+        return false;
     }
 }

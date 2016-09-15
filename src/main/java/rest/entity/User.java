@@ -1,8 +1,7 @@
 package rest.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.ColumnTransformer;
-import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.NotBlank;
 import rest.constants.Constant;
 import rest.constants.ResponseType;
@@ -10,6 +9,9 @@ import rest.constants.Role;
 import rest.constants.VIP;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.EnumSet;
@@ -22,9 +24,9 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name ="user")
-public class User extends BaseEntity{
-    @Pattern(regexp = Constant.emailPattern,message = "必须为一个合法的Email地址")
+@Table(name = "user")
+public class User extends BaseEntity {
+    @Pattern(regexp = Constant.emailPattern, message = "必须为一个合法的Email地址")
     @NaturalId(mutable = true)
     private String email;
 
@@ -35,19 +37,25 @@ public class User extends BaseEntity{
 
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private VIP vip;
-
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private UserFund fund;
-
-    @Convert(converter = RolesConverter.class)
-    private EnumSet<Role> roles;
+    @Any(
+            metaColumn = @Column(name = "user_type", length = 8),
+            fetch = FetchType.LAZY
+    )
+    @AnyMetaDef(
+            idType = "long", metaType = "string",
+            metaValues = {
+                    @MetaValue(targetEntity = Consumer.class, value = "CONSUMER"),
+                    @MetaValue(targetEntity = Employee.class, value = "EMPLOYEE")
+            }
+    )
+    @Cascade({org.hibernate.annotations.CascadeType.ALL})
+    @JoinColumn(name = "type_id")
+    private UserType type;
 
     /**
      * 有该字段才能实现级联删除User
      */
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Set<LoginHistory> loginHistories;
 
     public User() {
@@ -58,19 +66,21 @@ public class User extends BaseEntity{
         this.email = user.getEmail();
         this.pwd = user.getPwd();
         this.name = user.getName();
-        this.vip = user.getVip();
-        this.fund = user.getFund();
-        this.roles = user.getRoles();
+        this.type=user.type;
     }
 
-
+    /**
+     * 消费者 构造函数
+     * @param email
+     * @param pwd
+     * @param name
+     * @param vip
+     */
     public User(String email, String pwd, String name, VIP vip) {
         this.email = email;
         this.pwd = pwd;
         this.name = name;
-        this.vip = vip;
-        this.roles=EnumSet.of(Role.USER);
-        this.fund = new UserFund(this,0,0);
+        this.type=new Consumer(vip);
     }
 
     public String getEmail() {
@@ -97,27 +107,11 @@ public class User extends BaseEntity{
         this.name = name;
     }
 
-    public VIP getVip() {
-        return vip;
+    public UserType getType() {
+        return type;
     }
 
-    public void setVip(VIP vip) {
-        this.vip = vip;
-    }
-
-    public UserFund getFund() {
-        return fund;
-    }
-
-    public void setFund(UserFund fund) {
-        this.fund = fund;
-    }
-
-    public EnumSet<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(EnumSet<Role> roles) {
-        this.roles = roles;
+    public void setType(UserType type) {
+        this.type = type;
     }
 }

@@ -10,19 +10,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import rest.constants.Constant;
-import rest.constants.ResponseType;
-import rest.constants.Role;
-import rest.constants.VIP;
+import rest.constants.*;
 import rest.dao.UserRepo;
+import rest.entity.Consumer;
 import rest.entity.User;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 @Service("userService")
 public class UserService implements UserDetailsService {
@@ -41,6 +36,9 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public ResponseType updateUser(long id, String type, String value) {
+        if(!(SpringUtil.checkUser(id) && SpringUtil.checkAdmin())){
+            return ResponseType.PERMISSION_DENIED;
+        }
         try {
             User u = userRepo.getOne(id);
             switch (type) {
@@ -54,7 +52,11 @@ public class UserService implements UserDetailsService {
                     u.setPwd(value);
                     break;
                 case "vip":
-                    u.setVip(VIP.valueOf(value));
+                    if(u.getType() instanceof Consumer) {
+                        ((Consumer) u.getType()).setVip(VIP.valueOf(value));
+                    }else{
+                        return ResponseType.INVALID_OPERATION;
+                    }
                     break;
                 default:
                     return ResponseType.USER_FILED_FINAL;
@@ -74,7 +76,7 @@ public class UserService implements UserDetailsService {
         try {
             userRepo.delete(id);
             return ResponseType.SUCCESS;
-        }catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             return ResponseType.USER_NOTFOUND;
         }
     }
@@ -88,65 +90,26 @@ public class UserService implements UserDetailsService {
         return userRepo.findOne(id);
     }
 
+    /**
+     * 普通用户注册(消费者)
+     * @param user
+     * @return
+     */
     public ResponseType register(User user) {
-        if(user.getEmail()==null || user.getPwd() == null || !user.getEmail().matches(Constant.emailPattern)){
+        if (user.getEmail() == null || user.getPwd() == null || !user.getEmail().matches(Constant.emailPattern)) {
             return ResponseType.INPUT_ERROR;
         }
         User validUser = userRepo.findByEmail(user.getEmail());
-        if(validUser != null) {
+        if (validUser != null) {
             return ResponseType.USER_NAME_CONFLICT;
         }
-        user.setVip(VIP.VIP1);
-        user.setRoles(EnumSet.of(Role.USER));
-        if(user.getName()==null){
+        Consumer consumer = new Consumer(VIP.VIP0);
+        user.setType(consumer);
+        if (user.getName() == null) {
             user.setName(user.getEmail());
         }
         userRepo.save(new User(user));
         return ResponseType.SUCCESS;
     }
 
-    private class SecurityUser extends User implements UserDetails {
-
-        public SecurityUser(User user) {
-            super(user);
-        }
-
-        @Override
-        public Collection<? extends GrantedAuthority> getAuthorities() {
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority(Role.ADMIN.getName());
-            authorities.add(authority);
-            return authorities;
-        }
-
-        @Override
-        public String getPassword() {
-            return this.getPwd();
-        }
-
-        @Override
-        public String getUsername() {
-            return this.getEmail();
-        }
-
-        @Override
-        public boolean isAccountNonExpired() {
-            return true;
-        }
-
-        @Override
-        public boolean isAccountNonLocked() {
-            return true;
-        }
-
-        @Override
-        public boolean isCredentialsNonExpired() {
-            return true;
-        }
-
-        @Override
-        public boolean isEnabled() {
-            return true;
-        }
-    }
 }

@@ -17,7 +17,7 @@ public enum ResponseType {
 
     PERMISSION_DENIED(3001,"权限不足"),
     NAME_ERROR(1,"名称错误"),
-    FATAL(2,"未知错误");
+    FATAL(2,"未知错误"), INVALID_OPERATION(4001,"不支持的操作");
 
     private int code;
     private String msg;
