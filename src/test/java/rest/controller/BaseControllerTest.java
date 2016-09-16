@@ -42,8 +42,8 @@ public class BaseControllerTest {
     }
 
     public static RequestPostProcessor simpleUser() {
-        SimpleGrantedAuthority authorities = new SimpleGrantedAuthority("USER");
-        return user("user").authorities(authorities);
+//        SimpleGrantedAuthority authorities = new SimpleGrantedAuthority("USER");
+        return user("user");//.authorities(authorities);
     }
 
     public static User requestAdmin(){

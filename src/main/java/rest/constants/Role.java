@@ -20,7 +20,7 @@ public enum Role {
             return userRepo.findByEmail("jtduan@qq.com").getName();
         }
     },
-    USER("USER") {
+    WAITRESS("WAITRESS") {
         public String get() {
             return "WRITE";
         }

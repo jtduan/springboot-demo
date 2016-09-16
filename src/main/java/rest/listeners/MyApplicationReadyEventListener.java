@@ -23,6 +23,6 @@ public class MyApplicationReadyEventListener implements ApplicationListener<Appl
         logger.info("==Springboot启动监听器==");
 
         SpringUtil.getBean(BaseService.class).initDataBase();
-        new Thread(new Chiefer()).start();
+        new Thread(SpringUtil.getBean(Chiefer.class)).start();
     }
 }

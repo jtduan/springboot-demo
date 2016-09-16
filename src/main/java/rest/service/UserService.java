@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rest.constants.*;
 import rest.dao.UserRepo;
 import rest.entity.Consumer;
+import rest.entity.Employee;
 import rest.entity.User;
 
 import javax.persistence.EntityNotFoundException;
@@ -90,6 +91,9 @@ public class UserService implements UserDetailsService {
         return userRepo.findOne(id);
     }
 
+    public User findbyEmail(String email){
+        return userRepo.findByEmail(email);
+    }
     /**
      * 普通用户注册(消费者)
      * @param user
@@ -105,6 +109,27 @@ public class UserService implements UserDetailsService {
         }
         Consumer consumer = new Consumer(VIP.VIP0);
         user.setUserType(consumer);
+        if (user.getName() == null) {
+            user.setName(user.getEmail());
+        }
+        userRepo.save(new User(user));
+        return ResponseType.SUCCESS;
+    }
+
+    /**
+     * 厨师注册
+     * @param user
+     * @return
+     */
+    public ResponseType addEmployee(User user,Role role) {
+        if (user.getEmail() == null || user.getPwd() == null || !user.getEmail().matches(Constant.emailPattern)) {
+            return ResponseType.INPUT_ERROR;
+        }
+        User validUser = userRepo.findByEmail(user.getEmail());
+        if (validUser != null) {
+            return ResponseType.USER_NAME_CONFLICT;
+        }
+        user.setUserType(new Employee(EnumSet.of(role),0));
         if (user.getName() == null) {
             user.setName(user.getEmail());
         }

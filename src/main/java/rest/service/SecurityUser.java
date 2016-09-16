@@ -25,12 +25,6 @@ public class SecurityUser extends User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        if(this.getUserType() instanceof Consumer){
-////            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("USER");
-////            authorities.add(authority);
-////            return authorities;
-//            return Collections.EMPTY_LIST;
-//        }
         if(this.getUserType() instanceof Employee){
             for (Role role : ((Employee)this.getUserType()).getRoles()) {
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getName());

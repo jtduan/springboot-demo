@@ -2,7 +2,9 @@ package rest.listeners;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -20,6 +22,14 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 10000)
     public void reportCurrentTime() {
+        ConcurrentTaskScheduler t;
 //        log.info("The time is now {}", dateFormat.format(new Date()));
     }
+
+//    @Bean
+//	public ConcurrentTaskScheduler taskScheduler() {
+//		ConcurrentTaskScheduler task = new ConcurrentTaskScheduler();
+//		task.scheduleAtFixedRate(new SockTaskRunner(), 1000*60*SocketSessionInfo.SESSION_INVALID);
+//		return task;
+//	}
 }

@@ -29,8 +29,9 @@ public class MyHttpSessionListener implements HttpSessionListener, HttpSessionAt
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
         User user = (User) event.getSession().getAttribute("user");
+        if (user == null || user.getEmail()==null) return;
         map.remove(user.getEmail());
-        logger.info("用户下线："+user.getEmail());
+        logger.info("用户下线：" + user.getEmail());
     }
 
     @Override

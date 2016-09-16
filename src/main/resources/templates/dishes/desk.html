@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <script src="../../webjars/jquery/3.1.0/jquery.min.js"></script>
+    <script src="../../webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+    <script src="../../webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
+</head>
+
+<body>
+<p th:inline="text">
+    You are logged as: <b>[[${#httpServletRequest.remoteUser}]]</b>
+    (<a href="/logout">logout</a>)
+</p>
+
+<p>
+    Notifications received on the web socket channel will be displayed below:
+</p>
+<textarea id="notifications-area" cols="60" rows="10" readonly="readonly"></textarea>
+
+<!-- Javascript functions -->
+<script>
+
+    /**
+     * Open the web socket connection and subscribe the "/notify" channel.
+     */
+    function connect() {
+
+        // Create and init the SockJS object
+        var socket = new SockJS('/ws');
+        var stompClient = Stomp.over(socket);
+
+        // Subscribe the '/notify' channell
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/user/queue/notify', function (notification) {
+
+                // Call the notify function when receive a notification
+                notify(JSON.parse(notification.body).content);
+
+            });
+        });
+
+        return;
+    } // function connect
+
+    /**
+     * Display the notification message.
+     */
+    function notify(message) {
+        msg = message.split(":");
+
+        if (msg[0] == 'add') {
+            $("#orderlist").append(tr(msg[1], msg[2], msg[3], msg[4]));
+        }
+        else if (msg[0] == 'update') {
+            updateOrder(msg[1],msg[4]);
+        }
+        else {
+            $("#notifications-area").append(message + "\n");
+        }
+        return;
+    }
+
+    function updateOrder(msg, status) {
+        setTimeout(function () {
+            $(".order").each(function () {
+                if ($(this).find(".id").text() == msg) {
+                    $(this).find(".state").text(status);
+                }
+            });
+        },500);
+    }
+    function tr(id, name, prize, state) {
+        td_id = '<td style="display: none" class="id">' + id + '</td>';
+        td_name = '<td>' + name + '</td>';
+        td_prize = '<td>' + prize + '</td>';
+        td_state = '<td class="state">' + state + '</td>';
+        td_link = '<td><a class="cancel" href = "#">退菜</a> <a class="press" href = "#">催菜</a></td>';
+        return '<tr class="order">' + td_id + td_name + td_prize + td_state + td_link + '</tr>'
+    }
+    /**
+     * Init operations.
+     */
+    $(document).ready(function () {
+        connect();
+        $(document).on("click", ".order", function () {
+            temp = $(this).parent("td");
+            id = temp.siblings(".id").text();
+            $.ajax({
+                url: "/order/" + id,
+                data: "",
+                type: "POST",
+                success: function (data) {
+                    $("#notifications-area").append(data + "\n");
+                }
+            });
+        });
+
+        $(document).on("click", ".press", function () {
+            temp = $(this).parent("td");
+            id = temp.siblings(".id").text();
+            $.ajax({
+                url: "/order/press/" + id,
+                data: "",
+                type: "POST",
+                success: function (data) {
+                    $("#notifications-area").append(data + "\n");
+                }
+            });
+        });
+
+        $(document).on("click", ".cancel", function () {
+            temp = $(this).parent("td");
+            id = temp.siblings(".id").text();
+            $.ajax({
+                url: "/order/cancel/" + id,
+                data: "",
+                type: "POST",
+                success: function (data) {
+                    $("#notifications-area").append(data + "\n");
+                    temp.parent("tr").remove();
+                }
+            });
+        });
+    });
+
+</script>
+
+<br/>
+
+<p>欢迎您,<span th:text="${session.username}"></span></p>
+<table>
+    <tr>
+        <th>名称</th>
+        <th>价格</th>
+        <th>是否有效</th>
+        <th>动作</th>
+    </tr>
+    <tr th:each="dish : ${dishes}">
+        <td style="display: none" th:text="${dish.id}" class="id">-1</td>
+        <td th:text="${dish.name}">Onions</td>
+        <td th:text="${dish.price}">2.41</td>
+        <td th:text="${dish.valid}? 有效 : 无效">yes</td>
+        <td><a class="order" th:if="${dish.valid}" href="#">点餐</a></td>
+    </tr>
+</table>
+<p>==========已点菜品==========</p>
+
+<table id="orderlist">
+    <tr>
+        <th>名称</th>
+        <th>价格</th>
+        <th>状态</th>
+        <th>动作</th>
+    </tr>
+    <tr th:each="order : ${orders}" class="order">
+        <td style="display: none" th:text="${order.id}" class="id">-1</td>
+        <td th:text="${order.dish_name}">Onions</td>
+        <td th:text="${order.dish_price}">2.41</td>
+        <td th:text="${order.state}" class="state">正在烹饪</td>
+        <td>
+            <a class="cancel" th:if="${order.state}" href="#">退菜</a>
+            <a class="press" th:if="${order.state}" href="#">催菜</a>
+        </td>
+    </tr>
+</table>
+</body>
+
+</html>

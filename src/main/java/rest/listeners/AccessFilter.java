@@ -51,6 +51,7 @@ public class AccessFilter implements Filter {
         System.out.println("过滤器过滤");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         User user = (User) httpRequest.getSession().getAttribute("user");
+        if(user!=null && user.getId()==0) user=null;
         accessHistoryService.saveAccessHistory(user, httpRequest.getRemoteAddr(), httpRequest.getRequestURL().toString());
         chain.doFilter(request, response);
     }

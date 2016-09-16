@@ -1,6 +1,7 @@
 package rest.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rest.constants.*;
@@ -33,6 +34,14 @@ public class BaseService {
             userRepo.save(user);
         }
 
+        User user2 = new User("jtduan2@qq.com","jtduan","jtduan2", VIP.VIP1);
+        if(userRepo.findByEmail("jtduan2@qq.com")==null){
+            userRepo.save(user2);
+        }
+
+        this.InsertRandomCooker();
+        this.InsertRandomWaitress();
+
         Dish dish = new Dish("红烧排骨", DishType.SMALL,37,true);
         if(dishRepo.findByNameAndType("红烧排骨",DishType.SMALL)==null)dishRepo.save(dish);
 
@@ -50,21 +59,28 @@ public class BaseService {
     }
 
     @Transactional
-    public User InsertRandomAdmin(){
-        Employee e = new Employee(EnumSet.of(Role.ADMIN),0);
-        User user = new User();
-        user.setName(RandomGenerator.text(5));
-        user.setEmail(RandomGenerator.email());
-        user.setPwd(RandomGenerator.text(5));
-        user.setUserType(e);
+    public User InsertRandomCooker(){
+        User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", Role.COOKER);
         return userRepo.save(user);
     }
 
     @Transactional
-    public long getNotExistIdinUser(){
+    public User InsertRandomWaitress(){
+        User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", Role.WAITRESS);
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public User InsertRandomAdmin(){
+        User user = new User(RandomGenerator.email(),RandomGenerator.text(5),"jtduan", Role.ADMIN);
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public long getNotExistIdin(Class<?> c){
         for(int i=0;i<100;i++){
             long id = RandomGenerator.getRandom(100000)+100000;
-            if(SpringUtil.getEntityManager().find(User.class,id)==null) return id;
+            if(SpringUtil.getEntityManager().find(c,id)==null) return id;
         }
         throw new RuntimeException("找不到可用id");
     }
@@ -73,5 +89,31 @@ public class BaseService {
     public long getExistIdinUser(){
         List<User> l = userRepo.findAll();
         return l.get(RandomGenerator.getRandom(l.size()-1)).getId();
+    }
+
+    @Transactional
+    public long getExistIdinDish() {
+        List<Dish> l = dishRepo.findAll();
+        return l.get(RandomGenerator.getRandom(l.size()-1)).getId();
+    }
+
+    @Transactional
+    public User getTestUser() {
+        return userRepo.findByEmail("jtduan@qq.com");
+    }
+
+    @Transactional
+    public long getTestUserId() {
+        return userRepo.findByEmail("jtduan@qq.com").getId();
+    }
+
+    @Transactional
+    public User getTestUser2() {
+        return userRepo.findByEmail("jtduan2@qq.com");
+    }
+
+    @Transactional
+    public long getTestUser2Id() {
+        return userRepo.findByEmail("jtduan2@qq.com").getId();
     }
 }

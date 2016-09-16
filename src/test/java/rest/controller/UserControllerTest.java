@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 import rest.constants.RandomGenerator;
 import rest.constants.ResponseType;
+import rest.entity.User;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static rest.controller.BaseControllerTest.*;
@@ -43,7 +44,7 @@ public class UserControllerTest {
     @Test
     @Transactional
     public void testUpdateUser() throws Exception {
-        String uri = "/users/"+baseService.getNotExistIdinUser();
+        String uri = "/users/"+baseService.getNotExistIdin(User.class);
         MvcResult mvcResult = mvc.perform(put(uri).with(admin()).sessionAttr("user",requestAdmin())
                 .param("value", RandomGenerator.email())
                 .param("type", "email")
@@ -91,7 +92,7 @@ public class UserControllerTest {
                 mvcResult.getResponse().getContentAsString());
 
         
-        uri = "/users/"+baseService.getNotExistIdinUser();
+        uri = "/users/"+baseService.getNotExistIdin(User.class);
         mvcResult = mvc.perform(delete(uri).with(admin())
                 .accept(MediaType.ALL)).andReturn();
         mvcResult.getResponse().setCharacterEncoding("utf-8");

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.NotBlank;
 import rest.constants.Constant;
+import rest.constants.Role;
 import rest.constants.VIP;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.*;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
+import java.util.EnumSet;
 import java.util.Set;
 
 /**
@@ -84,6 +86,18 @@ public class User extends BaseEntity {
         this.userType=new Consumer(vip);
     }
 
+    /**
+     * 员工 构造函数
+     * @param email
+     * @param pwd
+     * @param name
+     */
+    public User(String email, String pwd, String name, Role role) {
+        this.email = email;
+        this.pwd = pwd;
+        this.name = name;
+        this.userType=new Employee(EnumSet.of(role),0);
+    }
     public String getEmail() {
         return email;
     }

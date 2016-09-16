@@ -17,7 +17,11 @@ public enum ResponseType {
 
     PERMISSION_DENIED(3001,"权限不足"),
     NAME_ERROR(1,"名称错误"),
-    FATAL(2,"未知错误"), INVALID_OPERATION(4001,"不支持的操作");
+    ORDER_NUM_INVILID(4001,"菜单数量不符合规则"),
+    ORDER_DOING(4002,"菜单已经不可撤销"),
+    FATAL(2,"未知错误"),
+    INVALID_OPERATION(4001,"不支持的操作"),
+    NOTEXIST_DISH(4003,"不存在的菜品");
 
     private int code;
     private String msg;

@@ -3,14 +3,19 @@ package rest.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import rest.constants.ResponseType;
 import rest.dao.DishRepo;
 import rest.entity.Dish;
+import rest.module.websocket.Notification;
+import rest.module.websocket.NotificationService;
 
 import javax.annotation.security.PermitAll;
 
@@ -25,6 +30,9 @@ public class TestController {
 
     @Autowired
     private DishRepo dishRepo;
+
+    @Autowired
+    private NotificationService notificationService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -58,19 +66,29 @@ public class TestController {
         throw new RuntimeException("teye");
     }
 
-//    @ResponseBody
-//    @RequestMapping("test1")
-//    public String test(){
-//        Dish dish = dishRepo.findByNameAndType("红烧排骨", DishType.STANDARD);
-//        CustomQueue.push(dish,3);
-//        return "success";
-//    }
-//
-//    @ResponseBody
-//    @RequestMapping("test2")
-//    public String test2(){
-//        Dish dish = dishRepo.findByNameAndType("红烧排骨", DishType.SMALL);
-//        CustomQueue.push(dish,1);
-//        return "success";
-//    }
+    @RequestMapping(value = "/websocket", method = RequestMethod.GET)
+    public String index() {
+        return "base/websocket/websocket_client";
+    }
+
+    @RequestMapping(value = "/notify", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> notifyOneUser() {
+        notificationService.notify(
+                new Notification("hello"), // notification object
+                1                    // username
+        );
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/notifyAll", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> notifyAllUser() {
+        notificationService.notifyAll(
+                new Notification("hello,everyone!") // notification object
+        );
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
