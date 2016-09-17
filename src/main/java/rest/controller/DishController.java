@@ -28,24 +28,26 @@ import java.util.List;
 @PreAuthorize("authenticated")
 public class DishController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DishController.class);
 
     @Autowired
     private DishRepo dishRepo;
 
     /**
      * dish列表
+     *
      * @return
      */
-    @RequestMapping(value="",method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(HttpSession session, Model model) {
-        List<Dish> list=dishRepo.findAll();
-        model.addAttribute("dishes",list);
+        List<Dish> list = dishRepo.findAll();
+        model.addAttribute("dishes", list);
         return "dishes/list";
     }
 
     /**
      * 添加dish
+     *
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -59,39 +61,42 @@ public class DishController {
 
     /**
      * 更新dish
+     *
      * @param dish
      * @return
      */
     @RequestMapping(value = "{id:[0-9]+}", method = RequestMethod.PUT)
     @ResponseBody
     public String update(Dish dish) {
-        return ViewHelper.renderJson("0","success1");
+        return ViewHelper.renderJson("0", "success1");
     }
 
     /**
      * 删除dish
+     *
      * @return
      */
     @RequestMapping(value = "/test/{id:ddd}", method = RequestMethod.GET)
     @ResponseBody
     public String del() {
         System.out.println("sssssss");
-        return ViewHelper.renderJson("0","success2");
+        return ViewHelper.renderJson("0", "success2");
     }
 
     /**
      * dish详情页,添加dish页面
+     *
      * @param id
      * @return
      */
     @RequestMapping(value = "{id:[0-9-]+}", method = RequestMethod.GET)
     public String getDish(@PathVariable long id, Model model) {
-        if(id==-1) {
+        if (id == -1) {
             model.addAttribute("dishes", new Dish());
             return "dishes/detail";
         }
         Dish dish = dishRepo.findOne(id);
-        if(dish==null){
+        if (dish == null) {
             return "no_resource";
         }
         model.addAttribute("dishes", dish);

@@ -13,54 +13,37 @@
     (<a href="/logout">logout</a>)
 </p>
 
-<p>
-    Notifications received on the web socket channel will be displayed below:
-</p>
 <textarea id="notifications-area" cols="60" rows="10" readonly="readonly"></textarea>
-
-<!-- Javascript functions -->
 <script>
-
-    /**
-     * Open the web socket connection and subscribe the "/notify" channel.
-     */
     function connect() {
-
-        // Create and init the SockJS object
         var socket = new SockJS('/ws');
         var stompClient = Stomp.over(socket);
-
-        // Subscribe the '/notify' channell
         stompClient.connect({}, function (frame) {
             stompClient.subscribe('/user/queue/notify', function (notification) {
-
-                // Call the notify function when receive a notification
                 notify(JSON.parse(notification.body).content);
-
             });
         });
-
         return;
-    } // function connect
-
-    /**
-     * Display the notification message.
-     */
+    }
     function notify(message) {
         msg = message.split(":");
-
         if (msg[0] == 'add') {
+            remain = $("#remain").text();
+            $("#remain").text(remain - msg[3]);
             $("#orderlist").append(tr(msg[1], msg[2], msg[3], msg[4]));
         }
         else if (msg[0] == 'update') {
-            updateOrder(msg[1],msg[4]);
+            updateOrder(msg[1], msg[4]);
+            if(msg[4] == 'CANCELED') {
+                remain = $("#remain").text();
+                $("#remain").text(Number(remain) + Number(msg[3]));
+            }
         }
         else {
             $("#notifications-area").append(message + "\n");
         }
         return;
     }
-
     function updateOrder(msg, status) {
         setTimeout(function () {
             $(".order").each(function () {
@@ -68,7 +51,7 @@
                     $(this).find(".state").text(status);
                 }
             });
-        },500);
+        }, 500);
     }
     function tr(id, name, prize, state) {
         td_id = '<td style="display: none" class="id">' + id + '</td>';
@@ -78,9 +61,6 @@
         td_link = '<td><a class="cancel" href = "#">退菜</a> <a class="press" href = "#">催菜</a></td>';
         return '<tr class="order">' + td_id + td_name + td_prize + td_state + td_link + '</tr>'
     }
-    /**
-     * Init operations.
-     */
     $(document).ready(function () {
         connect();
         $(document).on("click", ".order", function () {
@@ -125,10 +105,8 @@
     });
 
 </script>
-
-<br/>
-
-<p>欢迎您,<span th:text="${session.username}"></span></p>
+<p>欢迎您,<span th:text="${session.user.username}"></span></p>
+<p>当前余额为：<span th:text="${remain}" id="remain"></span></p>
 <table>
     <tr>
         <th>名称</th>
@@ -145,7 +123,6 @@
     </tr>
 </table>
 <p>==========已点菜品==========</p>
-
 <table id="orderlist">
     <tr>
         <th>名称</th>
@@ -165,5 +142,4 @@
     </tr>
 </table>
 </body>
-
 </html>

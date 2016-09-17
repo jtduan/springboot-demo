@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import rest.constants.ResponseType;
 import rest.dao.DishRepo;
+import rest.entity.Consumer;
 import rest.entity.Dish;
 import rest.entity.User;
 import rest.module.websocket.Notification;
 import rest.module.websocket.NotificationService;
 import rest.service.OrderService;
+import rest.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -29,6 +31,8 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
+    private UserService userService;
+    @Autowired
     private DishRepo dishRepo;
     @Autowired
     private OrderService orderervice;
@@ -39,6 +43,7 @@ public class OrderController {
         List<Dish> list=dishRepo.findAll();
         model.addAttribute("dishes",list);
         model.addAttribute("orders",orderervice.findNotFinishedOrders(u));
+        model.addAttribute("remain",userService.getRemain(u));
         return "dishes/desk";
     }
 

@@ -3,6 +3,7 @@ package rest.entity;
 import rest.constants.Role;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.EnumSet;
 
 @Entity
@@ -37,5 +38,20 @@ public class Employee extends BaseEntity implements UserType{
     public Employee(EnumSet<Role> roles, double salary) {
         this.roles = roles;
         this.salary = salary;
+    }
+
+    @Override
+    public void recharge(double money) {
+        this.salary+=money;
+    }
+
+    @Override
+    public void cost(double money) {
+        this.salary-=money;
+    }
+
+    @Override
+    public void cancel(double money) {
+        this.salary+=money;
     }
 }

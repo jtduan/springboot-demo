@@ -26,4 +26,9 @@ public interface UserRepo extends JpaRepository<User,Long> {
     @Modifying
     @Query("update User u set u.name=?2 where u.id=?1")
     public void updateUsername(long id,String username);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select u from User u where u.id=?1")
+    User getForUpdate(long id);
+
 }

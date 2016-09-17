@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rest.constants.*;
+import rest.dao.ConsumerRepo;
 import rest.dao.DishRepo;
 import rest.dao.UserRepo;
 import rest.entity.Dish;
@@ -25,17 +26,22 @@ public class BaseService {
     @Autowired
     private DishRepo dishRepo;
 
+    @Autowired
+    private ConsumerRepo consumerRepo;
+
     /**
      * 需求：使用hibernate batch完成大量数据插入
      */
     public void initDataBase(){
         User user = new User("jtduan@qq.com","jtduan","jtduan", VIP.VIP0);
         if(userRepo.findByEmail("jtduan@qq.com")==null){
+            user.getUserType().recharge(12888);
             userRepo.save(user);
         }
 
         User user2 = new User("jtduan2@qq.com","jtduan","jtduan2", VIP.VIP1);
         if(userRepo.findByEmail("jtduan2@qq.com")==null){
+            user.getUserType().recharge(12888);
             userRepo.save(user2);
         }
 
@@ -115,5 +121,18 @@ public class BaseService {
     @Transactional
     public long getTestUser2Id() {
         return userRepo.findByEmail("jtduan2@qq.com").getId();
+    }
+
+    @Transactional
+    public void updateUser() throws InterruptedException {
+        User u = userRepo.getForUpdate(1);
+        Thread.sleep(100000);
+        u.getUserType().recharge(19);
+        userRepo.save(u);
+    }
+
+    @Transactional
+    public void updateUserFund() throws InterruptedException {
+        consumerRepo.addOrCutRemain(1,18);
     }
 }

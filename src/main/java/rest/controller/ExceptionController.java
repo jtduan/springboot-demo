@@ -17,10 +17,10 @@ import rest.constants.ResponseType;
  */
 @ControllerAdvice(basePackages = "rest.controller")
 public class ExceptionController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionController.class);
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @ResponseBody
     public String greetingExceptionHandler(Exception ex) {
         logger.error(ex.getMessage());

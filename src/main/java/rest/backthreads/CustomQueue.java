@@ -1,9 +1,7 @@
 package rest.backthreads;
 
 import rest.constants.ResponseType;
-import rest.entity.Dish;
 import rest.entity.Order;
-import rest.entity.User;
 
 import java.util.Iterator;
 import java.util.Queue;
@@ -11,7 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.LockSupport;
 
 /**
- * Created by jtduan on 2016/9/7.
+ * Created by  on 2016/9/7.
  */
 
 public enum CustomQueue {

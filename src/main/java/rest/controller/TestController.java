@@ -16,6 +16,7 @@ import rest.dao.DishRepo;
 import rest.entity.Dish;
 import rest.module.websocket.Notification;
 import rest.module.websocket.NotificationService;
+import rest.service.BaseService;
 
 import javax.annotation.security.PermitAll;
 
@@ -33,6 +34,9 @@ public class TestController {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private BaseService baseService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -90,5 +94,37 @@ public class TestController {
         );
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    /**
+     * 测试getForUpdate方法是否会对对象属性加锁（级联表加锁）
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    @ResponseBody
+    public String testForUpdate() {
+        try {
+            baseService.updateUser();
+        } catch (InterruptedException e) {
+            return "FAIL";
+        }
+        return "SUCCESS";
+    }
+
+    /**
+     * 测试getForUpdate方法是否会对对象属性加锁（级联表加锁）
+     * 结论：不会对属性对象表进行加锁
+     * @return
+     */
+    @RequestMapping(value = "/update2", method = RequestMethod.GET)
+    @ResponseBody
+    public String testForUpdate2() {
+        try {
+            baseService.updateUserFund();
+        } catch (InterruptedException e) {
+            return "FAIL";
+        }
+        return "SUCCESS";
     }
 }

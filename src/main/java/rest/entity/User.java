@@ -39,7 +39,7 @@ public class User extends BaseEntity {
 
     @Any(
             metaColumn = @Column(name = "user_type", length = 8),
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     @AnyMetaDef(
             idType = "long", metaType = "string",

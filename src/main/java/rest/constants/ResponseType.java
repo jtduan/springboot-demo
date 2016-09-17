@@ -21,7 +21,7 @@ public enum ResponseType {
     ORDER_DOING(4002,"菜单已经不可撤销"),
     FATAL(2,"未知错误"),
     INVALID_OPERATION(4001,"不支持的操作"),
-    NOTEXIST_DISH(4003,"不存在的菜品");
+    NOTEXIST_DISH(4003,"不存在的菜品"), NO_SUFFICIENT_FUND(1005,"余额不足");
 
     private int code;
     private String msg;

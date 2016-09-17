@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import rest.controller.UserController;
+import rest.entity.Consumer;
+import rest.entity.Employee;
 import rest.entity.User;
 import rest.service.LoginHistoryService;
 import rest.service.UserService;

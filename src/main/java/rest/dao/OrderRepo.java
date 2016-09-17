@@ -2,7 +2,9 @@ package rest.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import rest.constants.OrderState;
 import rest.entity.Order;
 import rest.entity.User;
@@ -21,4 +23,9 @@ public interface OrderRepo extends JpaRepository<Order,Long> {
     @Lock(value = LockModeType.PESSIMISTIC_WRITE)
     @Query(value = "select o from Order o where o.id = ?1")
     public Order getForUpdate(long id);
+
+    @Transactional
+    @Modifying
+    @Query("update Order o set o.state = ?2 where o.id=?1")
+    public void setState(long id,OrderState state);
 }

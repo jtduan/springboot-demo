@@ -3,6 +3,8 @@ package rest.entity;
 import rest.constants.VIP;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import java.time.LocalDateTime;
 
 /**
  * Created by jtduan on 2016/9/6.
@@ -19,6 +21,7 @@ public class Consumer extends BaseEntity implements UserType{
     /**
      * 余额
      */
+    @Min(0)
     private double remain;
 
     /**
@@ -61,5 +64,22 @@ public class Consumer extends BaseEntity implements UserType{
 
     public void setVip(VIP vip) {
         this.vip = vip;
+    }
+
+    @Override
+    public void recharge(double money) {
+        this.remain+=money;
+    }
+
+    @Override
+    public void cost(double money) {
+        this.remain-=money;
+        this.cost+=money;
+    }
+
+    @Override
+    public void cancel(double money) {
+        this.remain+=money;
+        this.cost-=money;
     }
 }

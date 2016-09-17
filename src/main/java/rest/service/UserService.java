@@ -1,5 +1,6 @@
 package rest.service;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,7 @@ import rest.dao.UserRepo;
 import rest.entity.Consumer;
 import rest.entity.Employee;
 import rest.entity.User;
+import rest.entity.UserType;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
@@ -27,8 +29,10 @@ public class UserService implements UserDetailsService {
     private UserRepo userRepo;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepo.findByEmail(email);
+        Hibernate.initialize(user.getUserType());
         if (user == null) {
             throw new UsernameNotFoundException("UserName " + email + " not found");
         }
@@ -137,4 +141,14 @@ public class UserService implements UserDetailsService {
         return ResponseType.SUCCESS;
     }
 
+    public double getRemain(User u) {
+        UserType type = userRepo.findOne(u.getId()).getUserType();
+        if(type instanceof Consumer) {
+            return ((Consumer) type).getRemain();
+        }
+        else if(type instanceof Employee){
+            return ((Employee)type).getSalary();
+        }
+        return 0;
+    }
 }

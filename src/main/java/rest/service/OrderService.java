@@ -8,12 +8,8 @@ import rest.backthreads.Waitress;
 import rest.constants.OrderState;
 import rest.constants.ResponseType;
 import rest.constants.SpringUtil;
-import rest.dao.DishRepo;
-import rest.dao.OrderRepo;
-import rest.dao.UserRepo;
-import rest.entity.Dish;
-import rest.entity.Order;
-import rest.entity.User;
+import rest.dao.*;
+import rest.entity.*;
 import rest.module.websocket.Notification;
 import rest.module.websocket.NotificationService;
 
@@ -35,20 +31,38 @@ public class OrderService {
     private OrderRepo orderRepo;
 
     @Autowired
+    private EmployeeRepo employeeRepo;
+
+    @Autowired
+    private ConsumerRepo consumerRepo;
+
+    @Autowired
     private NotificationService notificationService;
 
+    /**
+     * 悲观锁，2次连续的order不会造成数据不一致
+     * 注意，参数u 属于游离态，无法更新到数据库，需要getReference
+     * @param u
+     * @param id
+     * @return
+     */
     @PreAuthorize("authenticated")
+    @Transactional
     public ResponseType order(User u, long id){
-        if(!(SpringUtil.checkUser(u.getId())||SpringUtil.checkAdmin())){
-            return ResponseType.PERMISSION_DENIED;
+        try {
+            if (!(SpringUtil.checkUser(u.getId()) || SpringUtil.checkAdmin())) {
+                return ResponseType.PERMISSION_DENIED;
+            }
+            Dish dish = dishRepo.findOne(id);
+            if (dish == null) {
+                return ResponseType.NOTEXIST_DISH;
+            }
+            Order o = Waitress.INSTANCE.add(userRepo.getOne(u.getId()), dish);
+            notificationService.notify(new Notification("add", o), u.getId());
+            return ResponseType.SUCCESS;
+        }catch (Exception e){
+            return ResponseType.NO_SUFFICIENT_FUND ;
         }
-        Dish dish = dishRepo.findOne(id);
-        if(dish==null){
-            return ResponseType.NOTEXIST_DISH;
-        }
-        Order o = Waitress.INSTANCE.add(u,dish);
-        notificationService.notify(new Notification("add",o),u.getId());
-        return ResponseType.SUCCESS;
     }
 
     private Order save(Order order){
@@ -63,17 +77,43 @@ public class OrderService {
 
     public Order add(User u,Dish dish) {
         Order order = new Order(u,dish);
+        cost(order.getUser(),order.getDish_price());
         return orderRepo.save(order);
     }
 
+    /**
+     * 此处有BUG:两次更新可能会出现数据不一致
+     * @param user
+     * @param dish_price
+     */
+    private void cost(User user, double dish_price) {
+        if(user.getUserType() instanceof Consumer){
+            Consumer u = consumerRepo.getForUpdate(((Consumer) user.getUserType()).getId());
+            u.setRemain(u.getRemain() - dish_price);
+            u.setCost(u.getCost() + dish_price);
+            consumerRepo.save(u);
+        }
+        else if(user.getUserType() instanceof Employee){
+            Employee e = employeeRepo.getForUpdate(((Employee) user.getUserType()).getId());
+            e.setSalary(e.getSalary()- dish_price);
+            employeeRepo.save(e);
+        }
+    }
+
+    /**
+     * 该方法父级被synchornized修饰，不会出现多线程并发的情况
+     * 疑问：此处不能加orderRepo.save(order);会产生两条记录，为什么？(貌似启动服务器首次运行会这样）
+     * @param order
+     */
+    @Transactional
     public void cooking(Order order) {
         order.setState(OrderState.COOKING);
         notificationService.notify(new Notification("update",order),order.getUser().getId());
-        orderRepo.save(order);
+//        orderRepo.save(order);
     }
 
     public List<Order> findNotFinishedOrders(User u) {
-        User user =userRepo.getOne(u.getId());
+        User user = userRepo.getOne(u.getId());
         return orderRepo.findByUserAndStatus(user,OrderState.WAITING,OrderState.COOKING);
     }
 
@@ -85,6 +125,7 @@ public class OrderService {
         return Waitress.INSTANCE.press(order);
     }
 
+    @Transactional
     public ResponseType cancel(long id) {
         Order order = orderRepo.findOne(id);
         if(!(SpringUtil.checkUser(order.getUser().getId())||SpringUtil.checkAdmin())){
@@ -93,14 +134,47 @@ public class OrderService {
         return Waitress.INSTANCE.remove(order);
     }
 
+    /**
+     * 悲观锁，不会出现2次数据库表的更新（第二次state已经为CANCELED)
+     * @param id
+     * @return
+     */
     @Transactional
     public ResponseType setCancel(long id) {
         Order order = orderRepo.getForUpdate(id);
         if(order.getState().equals(OrderState.WAITING)){
             order.setState(OrderState.CANCELED);
             orderRepo.save(order);
+            cancel(order.getUser(),order.getDish_price());
             return ResponseType.SUCCESS;
         }
         return ResponseType.ORDER_DOING;
+    }
+
+    private void cancel(User user, double dish_price) {
+        if(user.getUserType() instanceof Consumer){
+            Consumer u = consumerRepo.getForUpdate(((Consumer) user.getUserType()).getId());
+            u.setRemain(u.getRemain() + dish_price);
+            u.setCost(u.getCost() - dish_price);
+            consumerRepo.save(u);
+        }
+        else if(user.getUserType() instanceof Employee){
+            Employee e = employeeRepo.getForUpdate(((Employee) user.getUserType()).getId());
+            e.setSalary(e.getSalary()+ dish_price);
+            employeeRepo.save(e);
+        }
+    }
+
+    private void addRemain(User user, double dish_price) {
+        if(user.getUserType() instanceof Consumer){
+            Consumer u = consumerRepo.getForUpdate(((Consumer) user.getUserType()).getId());
+            u.setRemain(u.getRemain()+ dish_price);
+            consumerRepo.save(u);
+        }
+        else if(user.getUserType() instanceof Employee){
+            Employee e = employeeRepo.getForUpdate(((Employee) user.getUserType()).getId());
+            e.setSalary(e.getSalary()+ dish_price);
+            employeeRepo.save(e);
+        }
     }
 }
