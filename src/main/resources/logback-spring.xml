@@ -17,6 +17,7 @@
         </rollingPolicy>
         <encoder>
             <pattern>%date|[%thread]|%level|%c{0}|%msg%n</pattern>
+            <charset>UTF-8</charset>
             <immediateFlush>false</immediateFlush>
         </encoder>
     </appender>
