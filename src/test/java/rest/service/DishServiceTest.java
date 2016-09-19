@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import rest.constants.RandomGenerator;
 import rest.constants.ResponseType;
 import rest.controller.BaseControllerTest;
@@ -28,20 +29,22 @@ public class DishServiceTest {
 
     @Test(expected = AuthenticationCredentialsNotFoundException.class)
     public void getMessageUnauthenticated() {
-        orderService.order(RandomGenerator.getRandomUser(),1);
+        orderService.order(RandomGenerator.getRandomUser().getId(),1);
     }
 
     @Test
+    @Transactional
     @WithUserDetails("jtduan@qq.com")
     public void testOrder() {
-        ResponseType responseType =  orderService.order(userService.findbyEmail("jtduan@qq.com"),3);
+        ResponseType responseType =  orderService.order(userService.findbyEmail("jtduan@qq.com").getId(),3);
         Assert.assertEquals("消费者点单",ResponseType.SUCCESS,responseType);
     }
 
     @Test
+    @Transactional
     @WithUserDetails("jtduan@qq.com")
     public void testOrder2() {
-        ResponseType responseType = orderService.order(BaseControllerTest.baseService.getTestUser2(),3);
+        ResponseType responseType = orderService.order(BaseControllerTest.baseService.getTestUser2().getId(),3);
         Assert.assertEquals("没有权限点别人的单",ResponseType.PERMISSION_DENIED,responseType);
     }
 

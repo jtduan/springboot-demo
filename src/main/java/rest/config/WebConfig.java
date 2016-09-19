@@ -1,9 +1,16 @@
 package rest.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import rest.constants.SpringUtil;
+import rest.entity.User;
 
 import java.util.List;
 
@@ -12,6 +19,7 @@ import java.util.List;
  */
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter{
+
     /**
      * 不使用注解方式时，可以使用此方式注册过滤器和监听器
      * 这个Bean可以被放到任何类中而不仅限于此类
@@ -52,7 +60,7 @@ public class WebConfig extends WebMvcConfigurerAdapter{
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
+//        registry.addViewController("/login").setViewName("login");
     }
 
     @Override

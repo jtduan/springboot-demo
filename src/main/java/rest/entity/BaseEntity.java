@@ -21,7 +21,7 @@ import java.util.Date;
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     protected long id;
 
     @Column(updatable=false)

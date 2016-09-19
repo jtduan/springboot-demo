@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import rest.constants.ResponseType;
 import rest.controller.UserController;
 import rest.entity.Dish;
@@ -49,6 +50,7 @@ public enum Waitress {
 
     public Order add(User u,Dish dish){
         Order order = orderService.add(u,dish);
+        log.error("========="+order.getId()+"");
         CustomQueue.INSTANCE.push(order);
         return order;
     }

@@ -17,8 +17,8 @@ public class LoginHistoryService {
     private LoginHistoryRepo loginHistoryRepo;
 
     @Transactional
-    public void loginSuccess(User user,String ip){
-        LoginHistory history = new LoginHistory(SpringUtil.getEntityManager().getReference(User.class,user.getId()),ip);
+    public void loginSuccess(long userId,String ip){
+        LoginHistory history = new LoginHistory(SpringUtil.getEntityManager().getReference(User.class,userId),ip);
         loginHistoryRepo.save(history);
     }
 

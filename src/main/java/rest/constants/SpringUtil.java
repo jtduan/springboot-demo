@@ -4,6 +4,9 @@ package rest.constants;
  * Created by jtduan on 2016/9/6.
  */
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -46,6 +49,11 @@ public class SpringUtil implements ApplicationContextAware {
     public static EntityManager getEntityManager() {
         return getApplicationContext().getBean(EntityManager.class);
     }
+
+    public static SessionFactory getSessionFactory() {
+        return getApplicationContext().getBean(HibernateEntityManagerFactory.class).getSessionFactory();
+    }
+
 
     /**
      * 获取登录用户
@@ -90,4 +98,6 @@ public class SpringUtil implements ApplicationContextAware {
         }
         return false;
     }
+
+
 }

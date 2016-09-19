@@ -22,6 +22,10 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
 import java.util.*;
 
+/**
+//        Hibernate.initialize(user.getUserType());
+ *
+ */
 @Service("userService")
 public class UserService implements UserDetailsService {
 
@@ -32,7 +36,6 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepo.findByEmail(email);
-        Hibernate.initialize(user.getUserType());
         if (user == null) {
             throw new UsernameNotFoundException("UserName " + email + " not found");
         }
@@ -141,8 +144,8 @@ public class UserService implements UserDetailsService {
         return ResponseType.SUCCESS;
     }
 
-    public double getRemain(User u) {
-        UserType type = userRepo.findOne(u.getId()).getUserType();
+    public double getRemain(long u) {
+        UserType type = userRepo.findOne(u).getUserType();
         if(type instanceof Consumer) {
             return ((Consumer) type).getRemain();
         }

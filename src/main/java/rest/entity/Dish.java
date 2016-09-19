@@ -23,12 +23,12 @@ import java.time.LocalDateTime;
 public class Dish extends BaseEntity implements Serializable {
 
     @NotBlank
-    @NaturalId (mutable = false)
+//    @NaturalId (mutable = true)
     private String name;
 
     @Enumerated(value = EnumType.STRING)
     @NotNull
-    @NaturalId (mutable = false)
+//    @NaturalId (mutable = true)
     private DishType type;
 
     private double price;
@@ -61,11 +61,11 @@ public class Dish extends BaseEntity implements Serializable {
         this.name = name;
     }
 
-    public DishType getUserType() {
+    public DishType getDishType() {
         return type;
     }
 
-    public void setUserType(DishType type) {
+    public void setDishType(DishType type) {
         this.type = type;
     }
 

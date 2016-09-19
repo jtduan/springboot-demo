@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import rest.constants.DishType;
 import rest.constants.ResponseType;
 import rest.dao.DishRepo;
 import rest.entity.Dish;
+import rest.entity.User;
 import rest.module.websocket.Notification;
 import rest.module.websocket.NotificationService;
 import rest.service.BaseService;
@@ -37,6 +39,8 @@ public class TestController {
 
     @Autowired
     private BaseService baseService;
+
+    private User u;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -125,6 +129,31 @@ public class TestController {
         } catch (InterruptedException e) {
             return "FAIL";
         }
+        return "SUCCESS";
+    }
+    /**
+     * 测试save方法能否对游离态对象Update
+     * 结论：不会对属性对象表进行加锁
+     * @return
+     */
+
+    @RequestMapping(value = "/set", method = RequestMethod.GET)
+    @ResponseBody
+    public String testsaveOrUpdate() {
+        baseService.set();
+        return "SUCCESS";
+    }
+
+    @RequestMapping(value = "/trans1", method = RequestMethod.GET)
+    @ResponseBody
+    public String trans1() throws InterruptedException {
+        baseService.trans1();
+        return "SUCCESS";
+    }
+    @RequestMapping(value = "/trans2", method = RequestMethod.GET)
+    @ResponseBody
+    public String trans2() throws InterruptedException {
+        baseService.trans2();
         return "SUCCESS";
     }
 }

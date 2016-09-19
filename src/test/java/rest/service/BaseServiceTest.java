@@ -15,6 +15,11 @@ import rest.constants.VIP;
 import rest.dao.UserRepo;
 import rest.entity.User;
 
+/**
+ * 与数据库操作相关的测试都需要加上@Transcational注解
+ * 不仅仅可以回滚事务，部分测试去掉注解会测试失败
+ */
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BaseServiceTest {

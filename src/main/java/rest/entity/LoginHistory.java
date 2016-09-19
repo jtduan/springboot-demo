@@ -1,5 +1,7 @@
 package rest.entity;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -29,7 +31,7 @@ public class LoginHistory{
 
     public LoginHistory(User user,String ip) {
         this.ip=ip;
-        this.user=user;
+//        this.user=user;
         this.res=true;
     }
 

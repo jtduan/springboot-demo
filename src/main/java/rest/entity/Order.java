@@ -32,7 +32,7 @@ public class Order extends BaseEntity{
 
     public Order(User user, Dish dish) {
         this.dish_name=dish.getName();
-        this.dish_type = dish.getUserType();
+        this.dish_type = dish.getDishType();
         this.dish_price = dish.getPrice();
         this.state = OrderState.WAITING;
         this.user = user;
