@@ -10,8 +10,8 @@ import java.util.concurrent.locks.LockSupport;
 
 /**
  * Created by jtduan on 2016/9/6.
- * 需求：使用线程池，没有任务时挂起，等待被唤醒
- * 2、同一菜品，大中小份一起做
+ * Todo：使用线程池，没有任务时挂起，等待被唤醒
+ * Todo:同一菜品，大中小份一起做(fixed)
  */
 @Component("ChieferTask")
 //@Scope("prototype")
@@ -30,7 +30,7 @@ public class Chiefer implements Runnable {
             while (true) {
                 waitedDish = Waitress.INSTANCE.notifyCooking();
                 if (waitedDish != null) {
-                    for (int i = 0; i < 5 + waitedDish.orders.size(); i++) {
+                    for (int i = 0; i < 50 + waitedDish.orders.size(); i++) {
                         try {
                             logger.info("chief正在烹饪...");
                             TimeUnit.SECONDS.sleep(1);

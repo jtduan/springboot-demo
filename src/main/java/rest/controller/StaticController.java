@@ -9,6 +9,8 @@ import rest.constants.SpringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -30,5 +32,12 @@ public class StaticController {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(ResponseType.PERMISSION_DENIED.getResponseStr());
         return null;
+    }
+
+    @RequestMapping(value="oauth",method = RequestMethod.GET)
+    public String oauth2(HttpSession session){
+        SpringUtil.oauthLogin("jtduan_outh2");
+        session.setAttribute(CurrentUserUtils.INSTANCE.CUR_USER,1l);
+        return "home";
     }
 }

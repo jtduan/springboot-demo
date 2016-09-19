@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * Created by jtduan on 2016/9/8.
- * 需求：开发自定义视图自动添加对应页面的权限，前端根据属性判断展示不同内容
+ * Todo：开发自定义视图自动添加对应页面的权限，前端根据属性判断展示不同内容
  */
 @Controller
 @RequestMapping("/dishes")

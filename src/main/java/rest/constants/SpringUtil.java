@@ -10,6 +10,8 @@ import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -99,5 +101,12 @@ public class SpringUtil implements ApplicationContextAware {
         return false;
     }
 
-
+    /**
+     * 调用该函数可以为用户分配权限，第三方登陆成功后使用
+     * @param name
+     */
+    public static void oauthLogin(String name){
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "N/A",
+                AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")));
+    }
 }

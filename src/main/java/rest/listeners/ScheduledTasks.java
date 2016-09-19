@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * Created by jtduan on 2016/9/6.
- * 需求：使用Quartz实现多线程Tasks并能动态开启和暂停定时任务
+ * Todo：使用Quartz实现多线程Tasks并能动态开启和暂停定时任务
  */
 @Component
 public class ScheduledTasks {

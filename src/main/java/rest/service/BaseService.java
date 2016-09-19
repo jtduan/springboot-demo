@@ -36,7 +36,7 @@ public class BaseService {
 
     private static Dish d = new Dish();
     /**
-     * 需求：使用hibernate batch完成大量数据插入
+     * Todo：使用hibernate batch完成大量数据插入
      */
     public void initDataBase() {
         User user = new User("jtduan@qq.com", "jtduan", "jtduan", VIP.VIP0);
