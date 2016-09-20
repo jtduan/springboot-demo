@@ -35,11 +35,11 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("UserName " + email + " not found");
-        }
-        return new SecurityUser(user);
+        Optional<User> user = userRepo.findByEmail(email);
+//        if (!user.isPresent()) {
+//            throw new UsernameNotFoundException("UserName " + email + " not found");
+//        }
+        return new SecurityUser(user.orElseThrow(()->{return new UsernameNotFoundException("UserName " + email + " not found");}));
     }
 
     @Transactional
@@ -99,7 +99,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User findbyEmail(String email){
-        return userRepo.findByEmail(email);
+        return userRepo.findByEmail(email).orElseThrow(()->{return new UsernameNotFoundException("UserName " + email + " not found");});
     }
     /**
      * 普通用户注册(消费者)
@@ -110,8 +110,7 @@ public class UserService implements UserDetailsService {
         if (user.getEmail() == null || user.getPwd() == null || !user.getEmail().matches(Constant.emailPattern)) {
             return ResponseType.INPUT_ERROR;
         }
-        User validUser = userRepo.findByEmail(user.getEmail());
-        if (validUser != null) {
+        if(userRepo.existsByEmail(user.getEmail())){
             return ResponseType.USER_NAME_CONFLICT;
         }
         Consumer consumer = new Consumer(VIP.VIP0);
@@ -132,8 +131,7 @@ public class UserService implements UserDetailsService {
         if (user.getEmail() == null || user.getPwd() == null || !user.getEmail().matches(Constant.emailPattern)) {
             return ResponseType.INPUT_ERROR;
         }
-        User validUser = userRepo.findByEmail(user.getEmail());
-        if (validUser != null) {
+        if(userRepo.existsByEmail(user.getEmail())){
             return ResponseType.USER_NAME_CONFLICT;
         }
         user.setUserType(new Employee(EnumSet.of(role),0));

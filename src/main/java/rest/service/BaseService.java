@@ -111,22 +111,22 @@ public class BaseService {
 
     @Transactional
     public User getTestUser() {
-        return userRepo.findByEmail("jtduan@qq.com");
+        return userRepo.findByEmail("jtduan@qq.com").get();
     }
 
     @Transactional
     public long getTestUserId() {
-        return userRepo.findByEmail("jtduan@qq.com").getId();
+        return userRepo.findByEmail("jtduan@qq.com").get().getId();
     }
 
     @Transactional
     public User getTestUser2() {
-        return userRepo.findByEmail("jtduan2@qq.com");
+        return userRepo.findByEmail("jtduan2@qq.com").get();
     }
 
     @Transactional
     public long getTestUser2Id() {
-        return userRepo.findByEmail("jtduan2@qq.com").getId();
+        return userRepo.findByEmail("jtduan2@qq.com").get().getId();
     }
 
     @Transactional

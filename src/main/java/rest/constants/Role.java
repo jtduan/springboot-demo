@@ -17,7 +17,7 @@ public enum Role {
 
     ADMIN("ADMIN") {
         public String get() {
-            return userRepo.findByEmail("jtduan@qq.com").getName();
+            return userRepo.findByEmail("jtduan@qq.com").get().getName();
         }
     },
     WAITRESS("WAITRESS") {
