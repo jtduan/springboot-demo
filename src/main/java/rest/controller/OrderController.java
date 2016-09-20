@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import rest.constants.Constant;
 import rest.constants.CurrentUserUtils;
 import rest.constants.ResponseType;
 import rest.dao.DishRepo;
@@ -40,7 +41,7 @@ public class OrderController {
 
     @RequestMapping(value="",method = RequestMethod.GET)
     public String order(Model model,HttpSession session){
-        Long user_id =(Long)session.getAttribute(CurrentUserUtils.INSTANCE.CUR_USER);
+        Long user_id =(Long)session.getAttribute(Constant.CUR_USER);
         List<Dish> list=dishRepo.findAll();
         model.addAttribute("dishes",list);
         model.addAttribute("orders",orderervice.findNotFinishedOrders(user_id));
@@ -48,20 +49,20 @@ public class OrderController {
         return "dishes/desk";
     }
 
-    @RequestMapping(value={"{id:[0-9]+}"},produces = { "text/x-responseType" },method = RequestMethod.POST)
+    @RequestMapping(value={"{id:[0-9]+}"},produces = { "text/plain" },method = RequestMethod.POST)
     @ResponseBody
     public ResponseType order(@PathVariable long id,HttpSession session){
-        Long user_id =(Long)session.getAttribute(CurrentUserUtils.INSTANCE.CUR_USER);
+        Long user_id =(Long)session.getAttribute(Constant.CUR_USER);
         return orderervice.order(user_id,id);
     }
 
-    @RequestMapping(value={"/press/{id:[0-9]+}"},produces = { "text/x-responseType" },method = RequestMethod.POST)
+    @RequestMapping(value={"/press/{id:[0-9]+}"},produces = { "text/plain" },method = RequestMethod.POST)
     @ResponseBody
     public ResponseType press(@PathVariable long id,HttpSession session){
         return orderervice.press(id);
     }
 
-    @RequestMapping(value={"/cancel/{id:[0-9]+}"},produces = { "text/x-responseType" },method = RequestMethod.POST)
+    @RequestMapping(value={"/cancel/{id:[0-9]+}"},produces = { "text/plain" },method = RequestMethod.POST)
     @ResponseBody
     public ResponseType cancel(@PathVariable long id,HttpSession session){
         return orderervice.cancel(id);

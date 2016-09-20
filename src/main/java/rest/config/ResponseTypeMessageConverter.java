@@ -23,7 +23,7 @@ import java.util.List;
 public class ResponseTypeMessageConverter extends AbstractHttpMessageConverter<ResponseType> {
 
     public ResponseTypeMessageConverter(){
-        super(new MediaType("text", "x-responseType", Charset.forName("UTF-8")));
+        super(MediaType.TEXT_PLAIN);
     }
 
     @Override

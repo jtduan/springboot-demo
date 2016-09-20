@@ -1,10 +1,8 @@
-package rest.dao;
+package rest.util;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import rest.constants.RandomGenerator;
 import rest.constants.VIP;
-import rest.entity.AccessHistory;
 import rest.entity.User;
 
 import javax.persistence.EntityManager;
@@ -15,7 +13,7 @@ import javax.persistence.PersistenceContext;
  */
 
 @Repository
-public class EntityDao {
+public class TestEntityDao {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -25,13 +23,6 @@ public class EntityDao {
     public void save(){
         User u = new User(RandomGenerator.email(),RandomGenerator.text(5),RandomGenerator.text(5),VIP.VIP1);
         entityManager.merge(u);
-    }
-
-
-    @Deprecated
-    @Transactional
-    public void saveAccessHistory(AccessHistory history){
-        entityManager.merge(history);
     }
 
 }

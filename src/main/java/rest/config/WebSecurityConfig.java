@@ -71,7 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                     .authorizeRequests()
                     .antMatchers("/", "/login").permitAll()
-                    .antMatchers("/dishes/**").authenticated() //.hasAuthority("ADMIN") //.hasRole("ADMIN")
+                    .antMatchers("/dishes/**").authenticated()
                     .antMatchers("/order/**").authenticated()
                     .anyRequest().permitAll()
                 .and()
@@ -113,7 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException exception) throws IOException, ServletException {
-            logger.info(httpServletRequest.getParameter("username")+"登录失败");
+            logger.warn(httpServletRequest.getParameter("username")+"登录失败");
             loginService.loginFailure(httpServletRequest.getParameter("username"),httpServletRequest.getParameter("password"),
                     httpServletRequest.getRemoteAddr());
             super.setDefaultFailureUrl("/login?error");

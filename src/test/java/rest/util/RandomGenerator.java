@@ -1,5 +1,6 @@
-package rest.constants;
+package rest.util;
 
+import rest.constants.VIP;
 import rest.entity.User;
 
 import java.util.Random;
@@ -32,7 +33,7 @@ public class RandomGenerator{
                 .append(text(2))
                 .append(".")
                 .append(text(3))
-                .toString();
+                .toString().toLowerCase();
     }
 
     public static User getRandomUser(){

@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
-import rest.constants.RandomGenerator;
+import rest.util.RandomGenerator;
 import rest.constants.ResponseType;
 import rest.entity.User;
 

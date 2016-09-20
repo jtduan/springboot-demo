@@ -24,7 +24,7 @@ public class MyErrorViewResolver implements ErrorViewResolver {
     public ModelAndView resolveErrorView(HttpServletRequest request,
                                          HttpStatus status, Map<String, Object> model) {
         logger.error(request.getRequestURI());
+
         return new ModelAndView("error/5xx");
     }
-
 }

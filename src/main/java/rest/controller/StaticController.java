@@ -3,6 +3,7 @@ package rest.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import rest.constants.Constant;
 import rest.constants.CurrentUserUtils;
 import rest.constants.ResponseType;
 import rest.constants.SpringUtil;
@@ -37,7 +38,7 @@ public class StaticController {
     @RequestMapping(value="oauth",method = RequestMethod.GET)
     public String oauth2(HttpSession session){
         SpringUtil.oauthLogin("jtduan_outh2");
-        session.setAttribute(CurrentUserUtils.INSTANCE.CUR_USER,1l);
+        session.setAttribute(Constant.CUR_USER,1l);
         return "home";
     }
 }

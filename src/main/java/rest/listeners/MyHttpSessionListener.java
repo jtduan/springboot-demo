@@ -3,6 +3,7 @@ package rest.listeners;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import rest.constants.Constant;
 import rest.constants.CurrentUserUtils;
 import rest.entity.User;
 import rest.module.websocket.Notification;
@@ -38,7 +39,7 @@ public class MyHttpSessionListener implements HttpSessionListener, HttpSessionAt
 
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
-        Long user = (Long) event.getSession().getAttribute(CurrentUserUtils.INSTANCE.CUR_USER);
+        Long user = (Long) event.getSession().getAttribute(Constant.CUR_USER);
         if (user == null) return;
         map.remove(user);
         logger.info("用户下线：" + user);
@@ -48,7 +49,7 @@ public class MyHttpSessionListener implements HttpSessionListener, HttpSessionAt
     public void attributeAdded(HttpSessionBindingEvent event) {
         String name = event.getName();
 
-        if (name.equals(CurrentUserUtils.INSTANCE.CUR_USER)) {
+        if (name.equals(Constant.CUR_USER)) {
             Long user = (Long) event.getValue();
             if (map.get(user) != null) {
                 HttpSession session = map.get(user);

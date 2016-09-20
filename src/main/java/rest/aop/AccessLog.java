@@ -12,14 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.boot.actuate.metrics.GaugeService;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import rest.constants.CurrentUserUtils;
-import rest.dao.AccessRepo;
 import rest.dao.UserRepo;
-import rest.entity.AccessHistory;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by jtduan on 2016/9/9.
@@ -34,9 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 public class AccessLog {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Autowired
-    private AccessRepo accessRepo;
 
     @Autowired
     private UserRepo userRepo;
@@ -55,24 +45,7 @@ public class AccessLog {
 
     @Before("method()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
-
         counterService.increment(joinPoint.getSignature() + "");
-
-//        Long id = CurrentUserUtils.INSTANCE.getUserId();
-//        String url = CurrentUserUtils.INSTANCE.getRequest().getRequestURL().toString();
-//        logger.info("用户"+"~"+id+"~"+url);
-
-//        AccessHistory history = null;
-//        if(id == null){
-//            history = new AccessHistory(null,CurrentUserUtils.INSTANCE.getRequest().getRemoteAddr(),
-//                    CurrentUserUtils.INSTANCE.getRequest().getRequestURL().toString());
-//        }
-//        else{
-//            history = new AccessHistory(userRepo.getOne(id),CurrentUserUtils.INSTANCE.getRequest().getRemoteAddr(),
-//                    CurrentUserUtils.INSTANCE.getRequest().getRequestURL().toString());
-//        }
-//        accessRepo.save(history);
-//        return;
     }
 
     @Around("execution(* rest.controller.*.*(..))")

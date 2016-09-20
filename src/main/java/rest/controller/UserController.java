@@ -39,18 +39,18 @@ public class UserController {
         return userService.findOne(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = {"text/x-responseType"})
+    @RequestMapping(method = RequestMethod.POST, produces = {"text/plain"})
     public ResponseType registerUser(User user) {
         return userService.register(user);
     }
 
-    @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.PUT, produces = {"text/x-responseType"})
+    @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.PUT, produces = {"text/plain"})
     @PreAuthorize("authenticated")
     public ResponseType updateUser(@PathVariable long id, @RequestParam String type, @RequestParam String value, HttpSession session) {
         return userService.updateUser(id, type, value);
     }
 
-    @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.DELETE, produces = {"text/x-responseType"})
+    @RequestMapping(value = "/{id:[0-9]+}", method = RequestMethod.DELETE, produces = {"text/plain"})
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseType deleteUser(@PathVariable Long id) {
         return userService.delete(id);

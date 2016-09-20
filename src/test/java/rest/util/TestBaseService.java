@@ -1,4 +1,4 @@
-package rest.service;
+package rest.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ import java.util.List;
 /**
  * Created by jtduan on 2016/9/6.
  */
-@Service
-public class BaseService {
+@Service("initService")
+public class TestBaseService {
     @Autowired
     private UserRepo userRepo;
 
@@ -34,30 +34,50 @@ public class BaseService {
     private ConsumerRepo consumerRepo;
 
     private static Dish d = new Dish();
-    /**
-     * Todo：使用hibernate batch完成大量数据插入
-     */
-    public void initDataBase() {
-        User user = new User("jtduan@qq.com", "jtduan", "jtduan", VIP.VIP0);
-        if (!userRepo.existsByEmail("jtduan@qq.com")) {
-            user.getUserType().recharge(12888);
-            userRepo.save(user);
+
+    @Transactional
+    public User InsertRandomUser() {
+        User user = new User(RandomGenerator.email(), RandomGenerator.text(5), "jtduan", VIP.values()[RandomGenerator.getRandom(4)]);
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public User InsertRandomCooker() {
+        User user = new User(RandomGenerator.email(), RandomGenerator.text(5), "jtduan", Role.COOKER);
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public User InsertRandomWaitress() {
+        User user = new User(RandomGenerator.email(), RandomGenerator.text(5), "jtduan", Role.WAITRESS);
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public User InsertRandomAdmin() {
+        User user = new User(RandomGenerator.email(), RandomGenerator.text(5), "jtduan", Role.ADMIN);
+        return userRepo.save(user);
+    }
+
+    @Transactional
+    public long getNotExistIdin(Class<?> c) {
+        for (int i = 0; i < 100; i++) {
+            long id = RandomGenerator.getRandom(100000) + 100000;
+            if (SpringUtil.getEntityManager().find(c, id) == null) return id;
         }
+        throw new RuntimeException("找不到可用id");
+    }
 
-        User user2 = new User("jtduan2@qq.com", "jtduan", "jtduan2", VIP.VIP1);
-        if (!userRepo.existsByEmail("jtduan2@qq.com")) {
-            user.getUserType().recharge(12888);
-            userRepo.save(user2);
-        }
+    @Transactional
+    public long getExistIdinUser() {
+        List<User> l = userRepo.findAll();
+        return l.get(RandomGenerator.getRandom(l.size() - 1)).getId();
+    }
 
-        Dish dish = new Dish("红烧排骨", DishType.SMALL, 37, true);
-        if (!dishRepo.existByNameAndType("红烧排骨", DishType.SMALL)) dishRepo.save(dish);
-
-        dish = new Dish("红烧排骨", DishType.STANDARD, 46, true);
-        if (!dishRepo.existByNameAndType("红烧排骨", DishType.STANDARD)) dishRepo.save(dish);
-
-        dish = new Dish("红烧排骨", DishType.BIG, 55, true);
-        if (!dishRepo.existByNameAndType("红烧排骨", DishType.BIG)) dishRepo.save(dish);
+    @Transactional
+    public long getExistIdinDish() {
+        List<Dish> l = dishRepo.findAll();
+        return l.get(RandomGenerator.getRandom(l.size() - 1)).getId();
     }
 
     @Transactional

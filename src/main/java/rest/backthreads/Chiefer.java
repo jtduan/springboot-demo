@@ -30,7 +30,7 @@ public class Chiefer implements Runnable {
             while (true) {
                 waitedDish = Waitress.INSTANCE.notifyCooking();
                 if (waitedDish != null) {
-                    for (int i = 0; i < 50 + waitedDish.orders.size(); i++) {
+                    for (int i = 0; i < 20 + waitedDish.orders.size(); i++) {
                         try {
                             logger.info("chief正在烹饪...");
                             TimeUnit.SECONDS.sleep(1);

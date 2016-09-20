@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.junit.Test;
 import rest.constants.DateUtil;
-import rest.constants.RandomGenerator;
+import rest.util.RandomGenerator;
 import rest.entity.User;
 
 import java.io.IOException;

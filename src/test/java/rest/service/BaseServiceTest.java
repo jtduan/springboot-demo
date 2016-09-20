@@ -7,7 +7,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestComponent;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ public class BaseServiceTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Autowired
-    BaseService service;
+    public BaseService service;
 
     @Autowired
     UserRepo userRepo;
@@ -45,17 +44,4 @@ public class BaseServiceTest {
         User user = new User("test@qq.okm","test","test", VIP.VIP1);
         userRepo.save(user);
     }
-    @Test
-    public void testTransactionalRes(){
-        Assert.assertNull("@Transactional未生效，表中找到测试数据",userRepo.findByEmail("test@qq.okm"));
-    }
-
-    @Test
-    @Transactional
-    public void getUser(){
-        User u=service.InsertRandomUser();
-        Assert.assertTrue(u.getId()>0);
-        Assert.assertNull("@Transactional未生效，表中找到测试数据",userRepo.findByEmail("test@qq.okm"));
-    }
-
 }

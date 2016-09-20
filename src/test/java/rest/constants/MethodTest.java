@@ -2,6 +2,7 @@ package rest.constants;
 
 import org.junit.Assert;
 import org.junit.Test;
+import rest.util.RandomGenerator;
 
 public class MethodTest{
 

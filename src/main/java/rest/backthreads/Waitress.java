@@ -28,7 +28,7 @@ public enum Waitress {
 
     private OrderService orderService;
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(Waitress.class);
 
     public OrderService getOrderService() {
         return orderService;
@@ -50,7 +50,6 @@ public enum Waitress {
 
     public Order add(User u,Dish dish){
         Order order = orderService.add(u,dish);
-        log.error("========="+order.getId()+"");
         CustomQueue.INSTANCE.push(order);
         return order;
     }
@@ -86,7 +85,7 @@ public enum Waitress {
     public void notifyCooking(Order order){
         orderService.cooking(order);
         notificationService.notify(new Notification("菜品已开始烹饪:"+order.getDish_name()),order.getUser().getId());
-        log.info("通知："+order.getUser().getEmail()+"-"+order.getDish_name());
+        log.info("通知(菜品已开始烹饪)："+order.getUser().getEmail()+"-"+order.getDish_name());
     }
 }
 @Component

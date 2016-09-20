@@ -3,21 +3,15 @@ package rest.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import rest.constants.DishType;
-import rest.constants.ResponseType;
-import rest.constants.SpringUtil;
 import rest.dao.DishRepo;
 import rest.entity.Consumer;
 import rest.entity.Dish;
 import rest.entity.User;
-import rest.module.websocket.Notification;
 import rest.module.websocket.NotificationService;
 import rest.service.BaseService;
 
@@ -63,7 +57,6 @@ public class Test2Controller {
     @RequestMapping(value = "/get2", method = RequestMethod.GET)
     @ResponseBody
     public String get2() {
-        System.out.println("===");
         if(u.getUserType() instanceof Consumer){
             System.out.println( ((Consumer) u.getUserType()).getRemain());
         }
