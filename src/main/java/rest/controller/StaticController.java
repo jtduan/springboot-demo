@@ -3,9 +3,7 @@ package rest.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import rest.constants.CurrentUserUtils;
-import rest.constants.ResponseType;
-import rest.constants.SpringUtil;
+import rest.constants.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,15 +16,15 @@ import java.io.IOException;
  */
 @Controller
 public class StaticController {
-    @RequestMapping(value={"","/home","/index"})
-    public String index(){
+    @RequestMapping(value = {"", "/home", "/index"})
+    public String index() {
         return "home";
     }
 
 
-    @RequestMapping(value="login",method = RequestMethod.GET)
+    @RequestMapping(value = "login", method = RequestMethod.GET)
     public String login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(!CurrentUserUtils.INSTANCE.isAjaxRequest()) {
+        if (!CurrentUserUtils.INSTANCE.isAjaxRequest()) {
             return "login";
         }
         response.setCharacterEncoding("UTF-8");
@@ -34,10 +32,11 @@ public class StaticController {
         return null;
     }
 
-    @RequestMapping(value="oauth",method = RequestMethod.GET)
-    public String oauth2(HttpSession session){
-        SpringUtil.oauthLogin("jtduan_outh2");
-        session.setAttribute(CurrentUserUtils.INSTANCE.CUR_USER,1l);
+    @RequestMapping(value = "annoymous", method = RequestMethod.GET)
+    public String oauth2(HttpSession session) {
+        long id = RandomGenerator.getRandom(50000);
+        SpringUtil.oauthLogin(Constant.AnnoymousPrefix + id);
+        CurrentUserUtils.INSTANCE.setUser(Constant.AnnoymousPrefix + id);
         return "home";
     }
 }

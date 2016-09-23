@@ -28,37 +28,35 @@ import java.util.List;
 @RequestMapping("/order")
 @PreAuthorize("authenticated")
 public class OrderController {
-
-    @Autowired
-    private UserService userService;
     @Autowired
     private DishRepo dishRepo;
     @Autowired
     private OrderService orderervice;
-    @RequestMapping(value="",method = RequestMethod.GET)
-    public String order(Model model,HttpSession session){
-        List<Dish> list=dishRepo.findByRestaurant(new Restaurant(1));
-        model.addAttribute("dishes",list);
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String order(Model model, HttpSession session) {
+        List<Dish> list = dishRepo.findByRestaurant(new Restaurant(1));
+        model.addAttribute("dishes", list);
         return "dishes/desk";
     }
 
     @Debug("order service")
-    @RequestMapping(value={"{id:[0-9]+}"},produces = { "text/x-responseType" },method = RequestMethod.POST)
+    @RequestMapping(value = {"{id:[0-9]+}"}, produces = {"text/x-responseType"}, method = RequestMethod.POST)
     @ResponseBody
-    public ResponseType order(@PathVariable long id,HttpSession session){
-        String user =(String)session.getAttribute(CurrentUserUtils.INSTANCE.CUR_USER);
-        return orderervice.order(user,id);
+    public ResponseType order(@PathVariable long id, HttpSession session) {
+        String user = (String) session.getAttribute(CurrentUserUtils.INSTANCE.CUR_USER);
+        return orderervice.order(user, new long[]{id});
     }
 
-    @RequestMapping(value={"/press/{id:[0-9]+}"},produces = { "text/x-responseType" },method = RequestMethod.POST)
+    @RequestMapping(value = {"/press/{id:[0-9]+}"}, produces = {"text/x-responseType"}, method = RequestMethod.POST)
     @ResponseBody
-    public ResponseType press(@PathVariable long id,HttpSession session){
-        return orderervice.press(id);
+    public ResponseType press(@PathVariable long id, HttpSession session) {
+        return ResponseType.SUCCESS;
     }
 
-    @RequestMapping(value={"/cancel/{id:[0-9]+}"},produces = { "text/x-responseType" },method = RequestMethod.POST)
+    @RequestMapping(value = {"/cancel/{id:[0-9]+}"}, produces = {"text/x-responseType"}, method = RequestMethod.POST)
     @ResponseBody
-    public ResponseType cancel(@PathVariable long id,HttpSession session){
+    public ResponseType cancel(@PathVariable long id, HttpSession session) {
         return orderervice.cancel(id);
     }
 

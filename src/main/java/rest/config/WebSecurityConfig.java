@@ -93,7 +93,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
             String name = authentication.getName();
             logger.info(name+"登录成功");
-            CurrentUserUtils.INSTANCE.serUser(name);
+            CurrentUserUtils.INSTANCE.setUser(name);
             super.onAuthenticationSuccess(httpServletRequest,httpServletResponse,authentication);
         }
     }

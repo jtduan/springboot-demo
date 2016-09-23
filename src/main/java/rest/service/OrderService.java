@@ -73,8 +73,7 @@ public class OrderService {
      * @return
      */
     @PreAuthorize("authenticated")
-    public ResponseType cancel(String user, long order_id) {
-        User u = getUser(user);
+    public ResponseType cancel(long order_id) {
         orderRepo.setState(order_id, OrderState.CANCELED);
         return ResponseType.SUCCESS;
     }

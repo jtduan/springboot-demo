@@ -35,14 +35,14 @@ public enum CurrentUserUtils {
      * 获取当前session里面放置的User对象
      * @return
      */
-    public Long getUserId(){
-        return (Long)getSession().getAttribute(CUR_USER);
+    public String getUser(){
+        return (String)getSession().getAttribute(CUR_USER);
     }
 
     /**
      * 把当前User对象放置到session里面
      */
-    public void serUser(String user){
+    public void setUser(String user){
         getSession().setAttribute(CUR_USER, user);
     }
 

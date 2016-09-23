@@ -3,6 +3,7 @@ package rest.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import rest.constants.Constant;
 import rest.entity.User;
 
 import java.util.Collection;
@@ -35,7 +36,7 @@ public class SecurityUser extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "USER_"+String.valueOf(this.getId());
+        return Constant.UserPrefix+String.valueOf(this.getId());
     }
 
     @Override
