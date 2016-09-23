@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -13,18 +14,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import rest.constants.CurrentUserUtils;
-import rest.constants.SpringUtil;
 import rest.controller.UserController;
-import rest.entity.Consumer;
-import rest.entity.Employee;
-import rest.entity.User;
-import rest.service.LoginHistoryService;
 import rest.service.UserService;
 
 import javax.servlet.ServletException;
@@ -83,8 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .logout().logoutSuccessUrl("/").invalidateHttpSession(true)
                     .permitAll();
-//        http
-//                .addFilterAt(myAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
+        http
+                .addFilterAt(myAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
     }
 
     @Autowired
@@ -94,28 +89,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Component
     private class loginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-        @Autowired
-        private LoginHistoryService loginService;
         @Override
         public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-            long userId = Long.parseLong(authentication.getName());
-            logger.info(userId+"登录成功");
-            CurrentUserUtils.INSTANCE.serUserId(userId);
-            loginService.loginSuccess(userId,httpServletRequest.getRemoteAddr());
+            String name = authentication.getName();
+            logger.info(name+"登录成功");
+            CurrentUserUtils.INSTANCE.serUser(name);
             super.onAuthenticationSuccess(httpServletRequest,httpServletResponse,authentication);
         }
     }
 
     @Component
     private class LoginFailHandler extends SimpleUrlAuthenticationFailureHandler {
-        @Autowired
-        private LoginHistoryService loginService;
 
         @Override
         public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException exception) throws IOException, ServletException {
             logger.info(httpServletRequest.getParameter("username")+"登录失败");
-            loginService.loginFailure(httpServletRequest.getParameter("username"),httpServletRequest.getParameter("password"),
-                    httpServletRequest.getRemoteAddr());
             super.setDefaultFailureUrl("/login?error");
             super.onAuthenticationFailure(httpServletRequest,httpServletResponse,exception);
         }

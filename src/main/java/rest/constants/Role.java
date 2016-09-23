@@ -50,6 +50,7 @@ public enum Role {
     }
 }
 
+@Deprecated
 @Component
 class PriviliageInjector {
     @Autowired

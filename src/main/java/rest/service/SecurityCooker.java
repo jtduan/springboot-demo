@@ -3,15 +3,15 @@ package rest.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import rest.entity.User;
+import rest.entity.Cooker;
 
 import java.util.Collection;
 import java.util.Collections;
 
-public class SecurityUser extends User implements UserDetails {
+public class SecurityCooker extends Cooker implements UserDetails {
 
-    public SecurityUser(User user) {
-        super(user);
+    public SecurityCooker(Cooker cooker) {
+        super(cooker);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class SecurityUser extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "USER_"+String.valueOf(this.getId());
+        return "COOKER_"+String.valueOf(this.getId());
     }
 
     @Override

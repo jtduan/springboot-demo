@@ -10,19 +10,14 @@ import javax.persistence.*;
  * 实现"快照版本",记录点餐时Dish状态
  */
 @Entity
-@Table(name = "dish_order")
+@Table(name = "orders")
 public class Order extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private String dish_name;
-
-    @Enumerated(value=EnumType.STRING)
-    private DishType dish_type;
-
-    private double dish_price;
+    private Dish dish;
 
     @Enumerated(value=EnumType.STRING)
     private OrderState state;
@@ -31,9 +26,6 @@ public class Order extends BaseEntity{
     }
 
     public Order(User user, Dish dish) {
-        this.dish_name=dish.getName();
-        this.dish_type = dish.getDishType();
-        this.dish_price = dish.getPrice();
         this.state = OrderState.WAITING;
         this.user = user;
     }
@@ -44,30 +36,6 @@ public class Order extends BaseEntity{
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getDish_name() {
-        return dish_name;
-    }
-
-    public void setDish_name(String dish_name) {
-        this.dish_name = dish_name;
-    }
-
-    public DishType getDish_type() {
-        return dish_type;
-    }
-
-    public void setDish_type(DishType dish_type) {
-        this.dish_type = dish_type;
-    }
-
-    public double getDish_price() {
-        return dish_price;
-    }
-
-    public void setDish_price(double dish_price) {
-        this.dish_price = dish_price;
     }
 
     public OrderState getState() {

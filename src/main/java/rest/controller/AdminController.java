@@ -11,18 +11,4 @@ import rest.service.UserService;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
-    @Autowired
-    private UserService userService;
-
-    @RequestMapping("/insertCooker")
-    public ResponseType insertCooker(User u){
-        return userService.addEmployee(u, Role.COOKER);
-    }
-
-    @RequestMapping("/insertWaitress")
-    public ResponseType insertWaitress(User u){
-        return userService.addEmployee(u, Role.WAITRESS);
-    }
-
 }

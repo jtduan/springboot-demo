@@ -3,6 +3,7 @@ package rest.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,12 +44,17 @@ public class TestController {
     @Autowired
     private BaseService baseService;
 
+
+    @Value("${constants.priviliage.write}")
+    private String text;
+
     private User u;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping("message_converter")
     public String message_convert(){
+        System.out.println(text);
         return "base/message_converter";
     }
 
@@ -101,62 +107,5 @@ public class TestController {
         );
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-
-    /**
-     * 测试getForUpdate方法是否会对对象属性加锁（级联表加锁）
-     * @return
-     */
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
-    @ResponseBody
-    public String testForUpdate() {
-        try {
-            baseService.updateUser();
-        } catch (InterruptedException e) {
-            return "FAIL";
-        }
-        return "SUCCESS";
-    }
-
-    /**
-     * 测试getForUpdate方法是否会对对象属性加锁（级联表加锁）
-     * 结论：不会对属性对象表进行加锁
-     * @return
-     */
-    @RequestMapping(value = "/update2", method = RequestMethod.GET)
-    @ResponseBody
-    public String testForUpdate2() {
-        try {
-            baseService.updateUserFund();
-        } catch (InterruptedException e) {
-            return "FAIL";
-        }
-        return "SUCCESS";
-    }
-    /**
-     * 测试save方法能否对游离态对象Update
-     * 结论：不会对属性对象表进行加锁
-     * @return
-     */
-
-    @RequestMapping(value = "/set", method = RequestMethod.GET)
-    @ResponseBody
-    public String testsaveOrUpdate() {
-        baseService.set();
-        return "SUCCESS";
-    }
-
-    @RequestMapping(value = "/trans1", method = RequestMethod.GET)
-    @ResponseBody
-    public String trans1() throws InterruptedException {
-        baseService.trans1();
-        return "SUCCESS";
-    }
-    @RequestMapping(value = "/trans2", method = RequestMethod.GET)
-    @ResponseBody
-    public String trans2() throws InterruptedException {
-        baseService.trans2();
-        return "SUCCESS";
     }
 }

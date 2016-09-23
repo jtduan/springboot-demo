@@ -8,6 +8,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,6 +56,10 @@ public class SpringUtil implements ApplicationContextAware {
 
     public static SessionFactory getSessionFactory() {
         return getApplicationContext().getBean(HibernateEntityManagerFactory.class).getSessionFactory();
+    }
+
+    public static CacheManager getCacheManager(){
+        return getApplicationContext().getBean(CacheManager.class);
     }
 
 
@@ -106,7 +112,7 @@ public class SpringUtil implements ApplicationContextAware {
      * @param name
      */
     public static void oauthLogin(String name){
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("user", "N/A",
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(name, "N/A",
                 AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER")));
     }
 }

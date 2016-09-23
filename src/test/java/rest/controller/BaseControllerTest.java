@@ -15,16 +15,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import rest.constants.Role;
-import rest.constants.VIP;
 import rest.entity.User;
 import rest.service.BaseService;
-import rest.service.UserService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.Filter;
-
-import java.util.EnumSet;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
@@ -44,10 +39,6 @@ public class BaseControllerTest {
     public static RequestPostProcessor simpleUser() {
 //        SimpleGrantedAuthority authorities = new SimpleGrantedAuthority("USER");
         return user("user");//.authorities(authorities);
-    }
-
-    public static User requestAdmin(){
-        return baseService.InsertRandomAdmin();
     }
 
     public static User requestUser(){

@@ -6,4 +6,8 @@ package rest.constants;
 public final class Constant {
 
     public static final String emailPattern="^(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w{2,3}){1,3})$";
+
+    public static final String UserPrefix="USER_";
+    public static final String CookerPrefix="USER_";
+    public static final String AdminPrefix="Admin_";
 }

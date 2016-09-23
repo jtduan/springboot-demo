@@ -22,12 +22,6 @@ public class QueueCountMetrics implements PublicMetrics {
     public Collection<Metric<?>> metrics() {
         List<Metric<?>> metrics = new LinkedList<>();
         metrics.add(new Metric("counter.queueSize", CustomQueue.INSTANCE.queue.size()));
-        Iterator<WaitedDish> it = CustomQueue.INSTANCE.queue.iterator();
-        int i=1;
-        while(it.hasNext()){
-            WaitedDish temp = it.next();
-            metrics.add(new Metric("counter.queue-"+temp.dish_name+":"+temp.orders.size(),i++));
-        }
         return metrics;
     }
 }

@@ -2,16 +2,11 @@ package rest.listeners;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import rest.constants.CurrentUserUtils;
-import rest.entity.User;
-import rest.module.websocket.Notification;
-import rest.module.websocket.NotificationService;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.*;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,10 +21,7 @@ public class MyHttpSessionListener implements HttpSessionListener, HttpSessionAt
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Map<Long, HttpSession> map = new ConcurrentHashMap<Long, HttpSession>();
-
-    @Autowired
-    private NotificationService notificationService;
+    private Map<String, HttpSession> map = new ConcurrentHashMap<String, HttpSession>();
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
@@ -49,17 +41,12 @@ public class MyHttpSessionListener implements HttpSessionListener, HttpSessionAt
         String name = event.getName();
 
         if (name.equals(CurrentUserUtils.INSTANCE.CUR_USER)) {
-            Long user = (Long) event.getValue();
+            String user = (String) event.getValue();
             if (map.get(user) != null) {
                 HttpSession session = map.get(user);
-                notificationService.notify(new Notification("你已经被踢下线"),user);
-                try {
-                    //等待消息发出后再向后执行
-                    //Todo：采用安全的方式保证消息发出
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                /**
+                 * 通知被踢下线
+                 */
                 session.invalidate();
                 logger.warn(user + "被踢下线");
             }
@@ -68,12 +55,12 @@ public class MyHttpSessionListener implements HttpSessionListener, HttpSessionAt
     }
 
     @Override
-    public void attributeRemoved(HttpSessionBindingEvent event) {
+    public void attributeRemoved(HttpSessionBindingEvent httpSessionBindingEvent) {
+
     }
 
     @Override
     public void attributeReplaced(HttpSessionBindingEvent httpSessionBindingEvent) {
-        System.out.println("attributeReplaced");
 
     }
 }

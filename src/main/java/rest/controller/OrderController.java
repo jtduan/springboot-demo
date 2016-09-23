@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import rest.constants.CurrentUserUtils;
+import rest.constants.Debug;
 import rest.constants.ResponseType;
 import rest.dao.DishRepo;
-import rest.entity.Consumer;
 import rest.entity.Dish;
-import rest.entity.User;
-import rest.module.websocket.Notification;
-import rest.module.websocket.NotificationService;
+import rest.entity.Restaurant;
 import rest.service.OrderService;
 import rest.service.UserService;
 
@@ -37,22 +35,19 @@ public class OrderController {
     private DishRepo dishRepo;
     @Autowired
     private OrderService orderervice;
-
     @RequestMapping(value="",method = RequestMethod.GET)
     public String order(Model model,HttpSession session){
-        Long user_id =(Long)session.getAttribute(CurrentUserUtils.INSTANCE.CUR_USER);
-        List<Dish> list=dishRepo.findAll();
+        List<Dish> list=dishRepo.findByRestaurant(new Restaurant(1));
         model.addAttribute("dishes",list);
-        model.addAttribute("orders",orderervice.findNotFinishedOrders(user_id));
-        model.addAttribute("remain",userService.getRemain(user_id));
         return "dishes/desk";
     }
 
+    @Debug("order service")
     @RequestMapping(value={"{id:[0-9]+}"},produces = { "text/x-responseType" },method = RequestMethod.POST)
     @ResponseBody
     public ResponseType order(@PathVariable long id,HttpSession session){
-        Long user_id =(Long)session.getAttribute(CurrentUserUtils.INSTANCE.CUR_USER);
-        return orderervice.order(user_id,id);
+        String user =(String)session.getAttribute(CurrentUserUtils.INSTANCE.CUR_USER);
+        return orderervice.order(user,id);
     }
 
     @RequestMapping(value={"/press/{id:[0-9]+}"},produces = { "text/x-responseType" },method = RequestMethod.POST)

@@ -9,10 +9,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import rest.constants.DishType;
-import rest.constants.VIP;
 import rest.dao.DishRepo;
 import rest.dao.UserRepo;
 import rest.entity.Dish;
+import rest.entity.Restaurant;
 import rest.entity.User;
 
 @RunWith(SpringRunner.class)
@@ -29,7 +29,7 @@ public class OtherTest {
     @Transactional
     @Rollback(true) //设置为false则不会回滚事务
     public void testTransactional() throws Exception {
-        User user = new User("test@qq.okm","test","test", VIP.VIP1);
+        User user = new User("test@qq.okm","test","test");
         userRepo.save(user);
     }
 
@@ -41,7 +41,7 @@ public class OtherTest {
 
     @Test
     public void testsaveOrUpdate() {
-        Dish dish = new Dish("红烧排骨", DishType.SMALL,37,true);
+        Dish dish = new Dish("红烧排骨", DishType.SMALL,37,true,new Restaurant(1));
         dish.setId(1);
         dish.setPrice(12);
         dishRepo.save(dish);

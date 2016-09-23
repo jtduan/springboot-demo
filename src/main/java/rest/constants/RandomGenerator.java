@@ -36,6 +36,6 @@ public class RandomGenerator{
     }
 
     public static User getRandomUser(){
-        return new User(RandomGenerator.email(), RandomGenerator.text(5), RandomGenerator.text(4), VIP.VIP1);
+        return new User(RandomGenerator.email(), RandomGenerator.text(5), RandomGenerator.text(4));
     }
 }

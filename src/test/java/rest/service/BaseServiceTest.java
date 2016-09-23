@@ -7,11 +7,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestComponent;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import rest.constants.VIP;
 import rest.dao.UserRepo;
 import rest.entity.User;
 
@@ -42,7 +40,7 @@ public class BaseServiceTest {
     @Transactional
     @Rollback(true) //设置为false则不会回滚事务
     public void testTransactional() throws Exception {
-        User user = new User("test@qq.okm","test","test", VIP.VIP1);
+        User user = new User("test@qq.okm","test","test");
         userRepo.save(user);
     }
     @Test

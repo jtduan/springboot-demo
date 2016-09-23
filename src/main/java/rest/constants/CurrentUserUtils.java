@@ -42,8 +42,8 @@ public enum CurrentUserUtils {
     /**
      * 把当前User对象放置到session里面
      */
-    public void serUserId(long user_id){
-        getSession().setAttribute(CUR_USER, user_id);
+    public void serUser(String user){
+        getSession().setAttribute(CUR_USER, user);
     }
 
     public boolean isAjaxRequest(){

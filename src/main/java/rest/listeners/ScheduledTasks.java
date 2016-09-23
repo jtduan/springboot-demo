@@ -22,7 +22,6 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 10000)
     public void reportCurrentTime() {
-        ConcurrentTaskScheduler t;
 //        log.info("The time is now {}", dateFormat.format(new Date()));
     }
 

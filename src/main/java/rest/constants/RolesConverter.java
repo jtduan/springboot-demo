@@ -1,4 +1,4 @@
-package rest.entity;
+package rest.constants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,7 @@ import rest.controller.UserController;
 import javax.persistence.AttributeConverter;
 import java.util.EnumSet;
 
+@Deprecated
 public class RolesConverter implements AttributeConverter<EnumSet<Role>, String> {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 

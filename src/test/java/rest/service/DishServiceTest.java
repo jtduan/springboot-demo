@@ -40,12 +40,11 @@ public class DishServiceTest {
         Assert.assertEquals("消费者点单",ResponseType.SUCCESS,responseType);
     }
 
-    @Test
-    @Transactional
-    @WithUserDetails("jtduan@qq.com")
-    public void testOrder2() {
-        ResponseType responseType = orderService.order(BaseControllerTest.baseService.getTestUser2().getId(),3);
-        Assert.assertEquals("没有权限点别人的单",ResponseType.PERMISSION_DENIED,responseType);
-    }
-
+//    @Test
+//    @Transactional
+//    @WithUserDetails("jtduan@qq.com")
+//    public void testOrder2() {
+//        ResponseType responseType = orderService.order(BaseControllerTest.baseService.getTestUser2().getId(),3);
+//        Assert.assertEquals("没有权限点别人的单",ResponseType.PERMISSION_DENIED,responseType);
+//    }
 }
