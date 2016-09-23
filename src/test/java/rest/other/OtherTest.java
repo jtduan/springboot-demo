@@ -35,7 +35,7 @@ public class OtherTest {
 
     @Test
     public void getUser(){
-        Assert.assertNull("@Transactional未生效，表中找到测试数据",userRepo.findByEmail("test@qq.okm"));
+        Assert.assertFalse("@Transactional未生效，表中找到测试数据",userRepo.findByEmail("test@qq.okm").isPresent());
     }
 
 

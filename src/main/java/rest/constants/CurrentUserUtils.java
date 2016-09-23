@@ -7,13 +7,14 @@ import rest.entity.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static rest.constants.Constant.CUR_USER;
+
 /**
  * Created by jtduan on 2016/9/19.
  */
 public enum CurrentUserUtils {
     INSTANCE;
 
-    public final String CUR_USER = "user_id";
     /**
      * 获取当前Request
      * @return

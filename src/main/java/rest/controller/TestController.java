@@ -58,7 +58,7 @@ public class TestController {
         return "base/message_converter";
     }
 
-    @RequestMapping(value = "convertEnumToStr", produces = { "text/x-responseType" })
+    @RequestMapping(value = "convertEnumToStr", produces = { "text/plain" })
     @ResponseBody
     public ResponseType convertEnumToStr() {
         return ResponseType.SUCCESS;
@@ -69,7 +69,7 @@ public class TestController {
      * @param type
      * @return
      */
-    @RequestMapping(value = "convertStrToEnum", produces = { "text/x-responseType" })
+    @RequestMapping(value = "convertStrToEnum", produces = { "text/plain" })
     @ResponseBody
     public ResponseType convertStrToEnum(@RequestBody ResponseType type) {
         logger.info("测试-Type类型："+type.getCode()+",Msg:"+type.getMsg());

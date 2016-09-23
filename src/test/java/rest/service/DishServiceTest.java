@@ -9,7 +9,7 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import rest.constants.RandomGenerator;
+import rest.util.RandomGenerator;
 import rest.constants.ResponseType;
 import rest.controller.BaseControllerTest;
 

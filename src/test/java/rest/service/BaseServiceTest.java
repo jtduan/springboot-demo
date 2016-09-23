@@ -25,7 +25,7 @@ public class BaseServiceTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Autowired
-    BaseService service;
+    public BaseService service;
 
     @Autowired
     UserRepo userRepo;
@@ -43,17 +43,4 @@ public class BaseServiceTest {
         User user = new User("test@qq.okm","test","test");
         userRepo.save(user);
     }
-    @Test
-    public void testTransactionalRes(){
-        Assert.assertNull("@Transactional未生效，表中找到测试数据",userRepo.findByEmail("test@qq.okm"));
-    }
-
-    @Test
-    @Transactional
-    public void getUser(){
-        User u=service.InsertRandomUser();
-        Assert.assertTrue(u.getId()>0);
-        Assert.assertNull("@Transactional未生效，表中找到测试数据",userRepo.findByEmail("test@qq.okm"));
-    }
-
 }

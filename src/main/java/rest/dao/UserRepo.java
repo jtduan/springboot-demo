@@ -29,7 +29,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select u from User u where u.id=?1")
-    User getForUpdate(long id);
+    public User getForUpdate(long id);
 
     @Query("select count(u)>0 from User u where u.email=?1")
     public boolean existsByEmail(String email);
